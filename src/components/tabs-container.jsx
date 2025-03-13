@@ -13,7 +13,7 @@ const TabsContainer = () => {
   const { selectedTabs } = useStore();
 
   return (
-    <div className="h-full">
+    <div className="h-full ">
       {/* Desktop View */}
       <div className="block h-full">
         <main className="w-full h-full flex flex-col md:flex-row justify-start items-center gap-3 px-2">
