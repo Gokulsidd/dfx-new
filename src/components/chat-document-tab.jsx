@@ -16,7 +16,7 @@ const ChatDocumentTab = () => {
 
   return (
     <Card
-    className={` text-slate-800 h-full flex flex-col rounded-2xl shadow-lg  ${
+    className={` text-slate-800 h-full flex flex-col rounded-2xl shadow-sm  ${
       isCollapsed ? "w-[50px]" : "w-full"
     }`}
     >

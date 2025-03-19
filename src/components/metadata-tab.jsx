@@ -16,7 +16,7 @@ const MetaDataTab = () => {
 
   return (
     <Card
-      className={`text-slate-800 h-full  flex flex-col rounded-2xl shadow-lg transition-all duration-300  ${
+      className={`text-slate-800 h-full  flex flex-col rounded-2xl shadow-sm transition-all duration-300  ${
         isCollapsed ? "w-[50px] min-w-[50px]" : "w-full"
       }`}
     >
