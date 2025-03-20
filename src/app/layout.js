@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${openSans.variable} font-[family-name:var(--font-open-sans)] antialiased`}
+        className={`${openSans.variable} font-[family-name:var(--font-open-sans)] antialiased overflow-hidden`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange > 
         {children}

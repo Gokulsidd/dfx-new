@@ -112,12 +112,11 @@ const DocumentSearchTab = ({ title, content }) => {
             <UploadDocument />
           </div>
           <div className="w-full flex flex-col p-2 md:p-4 rounded-2xl">
-          <div className="flex justify-between items-center px-4 md:px-6 py-2 bg-indigo-900/80 rounded-t-2xl shadow-sm">
-  <p className="text-white text-sm md:text-md px-2 md:px-4 py-2 font-medium tracking-wide">
-    📄 Document List
-  </p>
-</div>
-
+            <div className="flex justify-between items-center px-4 md:px-6 py-2 bg-indigo-900/80 rounded-t-2xl shadow-sm">
+              <p className="text-white text-sm md:text-md px-2 md:px-4 py-2 font-medium tracking-wide">
+                📄 Document List
+              </p>
+            </div>
             <div className="flex flex-col h-[300px] md:h-[400px] overflow-y-auto  rounded-2xl p-4 space-y-1 bg-white">
               {documents.map((item) => (
                 <div
@@ -125,15 +124,15 @@ const DocumentSearchTab = ({ title, content }) => {
                   onClick={() => handleSelectDocument(item)}
                   className={`flex items-center justify-between gap-3 p-4 rounded-xl  border transition-all duration-300 cursor-pointer ${
                     selectedDocumentId === item.id
-                      ? "bg-indigo-50 border-indigo-500/50 shadow-sm scale-[1.01] text-indigo-800/70"
-                      : "bg-white border-gray-100 hover:shadow-sm hover:scale-[1.01]"
+                      ? "bg-indigo-50 border-indigo-500/50 shadow-sm hover:shadow-md hover:border-indigo-400 text-indigo-800/70"
+                      : "bg-white border-gray-100 hover:shadow-sm hover:border-indigo-400]"
                   }`}
                 >
                   <div className="flex gap-4 justify-start items-center">
                     <Checkbox />
                     <>
-                    <p className="text-md font-medium">{item.id}</p>
-                    <p className="text-md font-medium">{item.name}</p>
+                      <p className="text-md font-medium">{item.id}</p>
+                      <p className="text-md font-medium">{item.name}</p>
                     </>
                   </div>
                 </div>

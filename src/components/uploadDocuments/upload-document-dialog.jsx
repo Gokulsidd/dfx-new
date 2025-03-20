@@ -16,7 +16,7 @@ const UploadDocumentDialog = () => {
           <Button
             variant="outline"
             className={
-              "dark:text-muted-foreground w-full h-10 font-light text-md text-muted-foreground hover:text-slate-50 dark:hover:text-indigo-50 hover:bg-indigo-900/70 rounded-3xl border-gray-300"
+              "dark:text-muted-foreground w-full h-10 font-light text-md text-muted-foreground hover:text-slate-50 dark:hover:text-indigo-50 hover:bg-indigo-900/80 rounded-3xl border-gray-300"
             }
           >
             <span className="text-xl">+</span>Upload Document
