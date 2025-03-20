@@ -117,7 +117,7 @@
 
 /* For WebKit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  width: 10px; /* Width of the scrollbar */
+  width: 8px; /* Width of the scrollbar */
   height: 10px; /* Height of the horizontal scrollbar */
 }
 

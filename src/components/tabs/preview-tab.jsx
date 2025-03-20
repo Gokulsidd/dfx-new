@@ -1,7 +1,7 @@
 "use client";
 
-import { Bot, FileSearch, SquareCode, X } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { FileSearch, X } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useState } from "react";
 import useStore from "@/store/useStore";
 

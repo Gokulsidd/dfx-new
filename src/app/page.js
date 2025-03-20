@@ -1,5 +1,5 @@
 import Header from "@/components/header";
-import TabsContainer from "@/components/tabs-container";
+import TabsContainer from "@/components/tabs/tabs-container";
 
 export default function Home() {
   return (

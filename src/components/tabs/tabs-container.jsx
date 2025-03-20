@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
 import { lazy, Suspense } from "react";
 import DocumentSearchTab from "./document-search-tab";
 import useStore from "@/store/useStore";
-import { Skeleton } from "./ui/skeleton";
-import NoDocumentSelected from "./no-document-selected";
+import { Skeleton } from "../ui/skeleton";
+import NoDocumentSelected from "../no-document-selected";
 
 const ChatDocumentTab = lazy(() => import("./chat-document-tab"))
 const MetaDataTab = lazy(() => import("./metadata-tab"))
@@ -16,7 +16,6 @@ const TabsContainer = () => {
   return (
     <div className="h-full">
       {/* Desktop View */}
-      <div className="block h-full">
         <main className="w-full h-full flex flex-col md:flex-row justify-start items-center gap-3 px-2">
           <DocumentSearchTab />
           {selectedTabs.options?.length === 0 && <NoDocumentSelected /> }
@@ -26,7 +25,6 @@ const TabsContainer = () => {
           {selectedTabs.options?.some((item) => item.label === "Chat") && (<ChatDocumentTab />)}
           </Suspense>
         </main>
-      </div>
     </div>
   );
 };

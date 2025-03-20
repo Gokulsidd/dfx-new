@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Bot, X } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import useStore from "@/store/useStore";
 
 const ChatDocumentTab = () => {
