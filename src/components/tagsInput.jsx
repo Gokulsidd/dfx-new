@@ -1,10 +1,15 @@
-"use client"
-import { useState } from "react";
-import { X } from "lucide-react";
+"use client";
+import { useState, useEffect } from "react";
+import { Trash2, X } from "lucide-react";
 
-export default function TagInput({ placeholder = "Add a tag", onChange }) {
-  const [tags, setTags] = useState([]);
+export default function TagInput({ placeholder = "Add a tag", value = [], onChange }) {
+  const [tags, setTags] = useState(value);
   const [inputValue, setInputValue] = useState("");
+
+  // Sync internal state when parent value changes
+  useEffect(() => {
+    setTags(value);
+  }, [value]);
 
   const addTag = (tag) => {
     const trimmed = tag.trim();
@@ -32,19 +37,19 @@ export default function TagInput({ placeholder = "Add a tag", onChange }) {
   };
 
   return (
-    <div className="w-full border rounded-xl p-2 flex flex-wrap gap-2 bg-white focus-within:ring-2 focus-within:ring-blue-400">
+    <div className="w-full border rounded-xl p-2 flex flex-wrap  gap-2 bg-white focus-within:ring-1 focus-within:ring-indigo-400/70">
       {tags.map((tag, index) => (
         <div
           key={index}
-          className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+          className="flex justify-center items-center bg-gray-100  text-muted-foreground px-3 py-1 border border-gray-200 rounded-full text-xs"
         >
-          {tag}
+          <p>{tag}</p>
           <button
             type="button"
             onClick={() => removeTag(index)}
-            className="ml-2 text-blue-500 hover:text-blue-700"
+            className="ml-2 text-muted-foreground hover:text-indigo-400"
           >
-            <X className="w-4 h-4" />
+            <X className="cursor-pointer" size={14} />
           </button>
         </div>
       ))}

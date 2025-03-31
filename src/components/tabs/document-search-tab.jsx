@@ -86,10 +86,17 @@ const DocumentSearchTab = ({ title, content }) => {
         </CardTitle>
       </CardHeader>
       {isCollapsed ? (
-        <CardContent className="md:flex flex-col justify-center items-center gap-3 hidden">
-          <Button variant="icon" className="hover:bg-gray-200/70 bg-gray-100">
-            <Plus size={18} className="text-muted-foreground" />
-          </Button>
+        <CardContent className="md:flex flex-col justify-center items-center gap-3">
+            <Tooltip >
+              <TooltipTrigger asChild>
+                <Button variant="icon" className="hover:bg-gray-200/70 bg-gray-100"  >
+                  <Plus size={18} className="text-muted-foreground" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side='right' >
+                Add Source
+              </TooltipContent>
+            </Tooltip>
           {selectedDocumentId && (
             <TooltipProvider>
               <Tooltip>
@@ -111,29 +118,26 @@ const DocumentSearchTab = ({ title, content }) => {
             <AddSource />
             <UploadDocument />
           </div>
-          <div className="w-full flex flex-col p-2 md:p-4 rounded-2xl">
+          <div className="w-full flex flex-col  rounded-2xl px-2 md:px-4">
             <div className="flex justify-between items-center px-4 md:px-6 py-2 bg-indigo-900/80 rounded-t-2xl shadow-sm">
               <p className="text-white text-sm md:text-md px-2 md:px-4 py-2 font-medium tracking-wide">
                 📄 Document List
               </p>
             </div>
-            <div className="flex flex-col h-[300px] md:h-[400px] overflow-y-auto  rounded-2xl p-4 space-y-1 bg-white">
+            <div className="flex flex-col h-[300px] md:h-[400px] overflow-y-auto  rounded-2xl rounded-t-none p-4 space-y-1 bg-white ">
               {documents.map((item) => (
                 <div
                   key={item.id}
                   onClick={() => handleSelectDocument(item)}
-                  className={`flex items-center justify-between gap-3 p-4 rounded-xl  border transition-all duration-300 cursor-pointer ${
+                  className={`flex items-center justify-between gap-3 p-4 rounded-xl cursor-pointer ${
                     selectedDocumentId === item.id
-                      ? "bg-indigo-50 border-indigo-500/50 shadow-sm hover:shadow-md hover:border-indigo-400 text-indigo-800/70"
+                      ? "bg-indigo-50 hover:border-indigo-400 text-indigo-800/70"
                       : "bg-white border-gray-100 hover:shadow-sm hover:border-indigo-400]"
                   }`}
                 >
                   <div className="flex gap-4 justify-start items-center">
-                    <Checkbox />
-                    <>
                       <p className="text-md font-medium">{item.id}</p>
                       <p className="text-md font-medium">{item.name}</p>
-                    </>
                   </div>
                 </div>
               ))}

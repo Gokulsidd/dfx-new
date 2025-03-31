@@ -23,7 +23,7 @@ const UploadDocumentDialog = () => {
           </Button>
         </DialogTrigger>
       </div>
-      <DialogContent className="w-full md:max-w-2xl lg:max-w-4xl h-[90%] flex flex-col gap-1 p-2 md:p-4 bg-white">
+      <DialogContent aria-describedby={undefined} className="w-full md:max-w-2xl lg:max-w-4xl h-[90%] flex flex-col gap-1 p-2 md:p-4 bg-white">
         <DialogHeader className={"flex items-start h-fit p-2"}>
           <DialogTitle className={"text-muted-foreground font-medium text-lg"}>
             Upload to
