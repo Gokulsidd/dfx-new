@@ -117,26 +117,57 @@
 
 /* For WebKit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
-  height: 10px; /* Height of the horizontal scrollbar */
+  width: 8px; /* Width of the vertical scrollbar */
+  height: 0px; /* Hide horizontal scrollbar by setting height to 0 */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 /* Track (background of the scrollbar) */
-::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Light gray background */
-  border-radius: 10px; /* Rounded corners */
-}
+/* ::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 10px; 
+} */
 
-/* Thumb (the draggable part of the scrollbar) */
+/* Vertical scrollbar thumb */
 ::-webkit-scrollbar-thumb {
-  background: #adafd1;/* Gray color */
+  background: #adafd1; /* Gray color */
   border-radius: 10px; /* Rounded corners */
   border: 3px solid #f1f1f1; /* Padding around the thumb */
+}
+
+/* Horizontal scrollbar thumb - now hidden */
+::-webkit-scrollbar-thumb:horizontal {
+  display: none; /* Hide horizontal scrollbar thumb */
 }
 
 /* Thumb on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #828282; /* Darker gray on hover */
+}
+
+/* Hide horizontal scrollbar track */
+::-webkit-scrollbar-track-piece:horizontal {
+  display: none;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-100% + 250px)); }
+}
+
+.marquee-container:hover .marquee-text {
+  animation: marquee 5s linear infinite;
+  display: inline-block;
 }
 
 @layer base {

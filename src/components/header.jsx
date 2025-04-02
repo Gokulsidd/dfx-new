@@ -9,7 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
 import useStore from "../store/useStore";
-import { User } from "lucide-react"; // Import the User icon from Lucide React
+import { EllipsisVertical, User } from "lucide-react"; // Import the User icon from Lucide React
+import { Tooltip, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import { TooltipContent } from "@radix-ui/react-tooltip";
 
 const mockUserData = {
   Repository: {
@@ -7620,18 +7622,18 @@ const mockData = [
 ];
 
 const Header = () => {
-  const { selectedTabs, toggleItem, user, fetchUser , selectedDocumentId } =
-    useStore();
+  const { selectedTabs, toggleItem, user, fetchUser ,setUser, selectedDocumentId } = useStore();
+
   const [loading, setLoading] = useState(true);
 
   const getUser = async () => {
-    // setUser(mockUserData); // Simulated user data
-    fetchUser()
+    setUser(mockUserData); // Simulated user data
+    // fetchUser()
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchUser();
+    getUser();
   }, []);
 
   const handleLogin = () => {
@@ -7639,37 +7641,48 @@ const Header = () => {
   };
 
   return (
-    <div className="w-full flex justify-between items-center px-4 py-2">
+    <div className="w-full flex justify-between items-center px-2 pr-4 py-2">
       <div>
         <h1 className="text-md font-extrabold tracking-wider text-white py-1 px-3 bg-gray-900 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] border border-gray-700 relative overflow-hidden">
           <span className="absolute inset-0 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 opacity-40"></span>
           <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500 to-purple-500 opacity-20 blur-md"></span>
-          <span className="relative z-10">DXF</span>
+          <span className="relative z-10">DFX</span>
         </h1>
       </div>
       <div className="flex items-center gap-4">
-        <DropdownMenu>
+      <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              variant="outline"
+              variant="ghost"
+              size="sm"
               disabled={!selectedDocumentId}
-              className="px-4 py-2 text-sm font-medium"
+              className="h-9 w-9 p-0 text-muted-foreground/70 hover:text-muted-foreground hover:bg-gray-100/50 transition-colors focus-visible:ring-1 focus-visible:ring-gray-200"
             >
-              Options
+              <TooltipProvider delayDuration={300}>
+                <Tooltip asChild>
+                  <TooltipTrigger asChild>
+                    <EllipsisVertical size={18} className="shrink-0" />
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="text-xs font-medium">
+                    Document options
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg"
+            className="w-48 rounded-lg border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800"
             align="end"
+            sideOffset={4}
           >
             {mockData.map((item) => (
               <DropdownMenuItem
                 key={item.id}
                 onClick={() => toggleItem("options", item)}
-                className={`px-4 py-2 text-sm ${
+                className={`px-3 py-2 text-sm transition-colors focus:bg-gray-100 dark:focus:bg-gray-700 ${
                   selectedTabs.options?.some((tab) => tab.id === item.id)
-                    ? "bg-indigo-100 text-indigo-700 dark:bg-gray-700 dark:text-indigo-300"
-                    : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                    ? "bg-indigo-50/60 text-indigo-500 dark:bg-gray-700/80 dark:text-indigo-400"
+                    : "text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700/50"
                 }`}
               >
                 {item.label}
@@ -7692,9 +7705,9 @@ const Header = () => {
                 {user.User.Name.split("\\").pop()}{" "}
                 {/* Extracts just the username after backslash */}
               </span>
-              <span className="text-xs mt-[1.2px] text-gray-500 dark:text-gray-400">
+              {/* <span className="text-xs mt-[1.2px] text-gray-500 dark:text-gray-400">
                 ({user.User.Roles[0]?.RoleName || "User"})
-              </span>
+              </span> */}
             </div>
           </div>
         )}

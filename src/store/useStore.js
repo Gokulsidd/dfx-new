@@ -8,6 +8,7 @@ const useStore = create((set) => ({
   documentData: null,
   apiError: null,
   loading: true,
+  IsAddSourceDialogOpen : false,
 
   /**
    * Fetches user details from the API.
@@ -35,16 +36,12 @@ const useStore = create((set) => ({
 
   /**
    * Sets the user object manually (if needed).
-   * @param {Object} user - User data.
    */
   setUser: (user) => {
     set({ user });
   },
-  
 
-  /**
-   * Clears the user data.
-   */
+
   clearUser: () => set({ user: null }),
 
   /**
@@ -142,6 +139,8 @@ const useStore = create((set) => ({
         },
       };
     }),
+  
+
 }));
 
 export default useStore;

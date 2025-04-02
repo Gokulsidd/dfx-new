@@ -13,6 +13,7 @@ import {
 import AddSourceDropdown from "./add-source-dropDown";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import useStore from "@/store/useStore";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
 const AddSourceDialog = () => {
   const [tags, setTags] = useState([]);
@@ -21,7 +22,7 @@ const AddSourceDialog = () => {
 
   const handleSearchClick = async () => {
     await setDocumentsList(tags);
-    setOpen(false); 
+    setOpen(false);
   };
 
   const handleClearClick = () => {
@@ -31,17 +32,27 @@ const AddSourceDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <div className="w-full text-center">
-        <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            onClick={() => setOpen(true)}
-            className="dark:text-muted-foreground w-full h-10 font-light text-md text-muted-foreground hover:text-slate-50 dark:hover:text-indigo-50 hover:bg-indigo-900/80 rounded-3xl border-gray-300"
-          >
-            <span className="text-xl">+</span> Add Source
-          </Button>
+        <DialogTrigger asChild >
+          <TooltipProvider >
+            <Tooltip asChild>
+              <TooltipTrigger asChild className='w-full'>
+                <Button
+                  variant="outline"
+                  onClick={() => setOpen(true)}
+                  className="w-full h-10 font-semibold text-sm text-muted-foreground hover:bg-indigo-50/50 rounded-full hover:border-gray-300"
+                >
+                  <span className="text-xl">+</span> Add Source
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className={'mt-2'}>add source</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </DialogTrigger>
       </div>
-      <DialogContent aria-describedby={undefined} className="w-full md:max-w-lg h-[60%] flex flex-col gap-1 p-2 md:p-4 bg-white">
+      <DialogContent
+        aria-describedby={undefined}
+        className="w-full md:max-w-lg h-[60%] flex flex-col gap-1 p-2 md:p-4 bg-white"
+      >
         <DialogHeader className="flex items-start h-fit p-2">
           <DialogTitle className="text-muted-foreground font-medium text-lg">
             Add Source
@@ -58,7 +69,10 @@ const AddSourceDialog = () => {
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="input" className="flex flex-col justify-between w-full h-full rounded-lg px-4 py-2">
+            <TabsContent
+              value="input"
+              className="flex flex-col justify-between w-full h-full rounded-lg px-4 py-2"
+            >
               <TagInput value={tags} onChange={setTags} />
               <div className="w-full flex gap-3 justify-end items-center">
                 <Button
@@ -75,7 +89,10 @@ const AddSourceDialog = () => {
                 </Button>
               </div>
             </TabsContent>
-            <TabsContent value="selectPack" className="w-full h-full rounded-lg p-0">
+            <TabsContent
+              value="selectPack"
+              className="w-full h-full rounded-lg p-0"
+            >
               <AddSourceDropdown />
             </TabsContent>
           </Tabs>
