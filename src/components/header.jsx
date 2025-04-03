@@ -10,8 +10,12 @@ import {
 } from "../components/ui/dropdown-menu";
 import useStore from "../store/useStore";
 import { EllipsisVertical, User } from "lucide-react"; // Import the User icon from Lucide React
-import { Tooltip, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
-import { TooltipContent } from "@radix-ui/react-tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 const mockUserData = {
   Repository: {
@@ -7622,7 +7626,14 @@ const mockData = [
 ];
 
 const Header = () => {
-  const { selectedTabs, toggleItem, user, fetchUser ,setUser, selectedDocumentId } = useStore();
+  const {
+    selectedTabs,
+    toggleItem,
+    user,
+    fetchUser,
+    setUser,
+    selectedDocumentId,
+  } = useStore();
 
   const [loading, setLoading] = useState(true);
 
@@ -7650,7 +7661,7 @@ const Header = () => {
         </h1>
       </div>
       <div className="flex items-center gap-4">
-      <DropdownMenu>
+        <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
@@ -7659,35 +7670,102 @@ const Header = () => {
               className="h-9 w-9 p-0 text-muted-foreground/70 hover:text-muted-foreground hover:bg-gray-100/50 transition-colors focus-visible:ring-1 focus-visible:ring-gray-200"
             >
               <TooltipProvider delayDuration={300}>
-                <Tooltip asChild>
+                <Tooltip>
                   <TooltipTrigger asChild>
-                    <EllipsisVertical size={18} className="shrink-0" />
+                    <span className="inline-flex hover:bg-gray-200 p-1 rounded-full">
+                      {" "}
+                      {/* Ensures proper wrapping */}
+                      <EllipsisVertical
+                        size={18}
+                        className="shrink-0 cursor-pointer "
+                      />
+                    </span>
                   </TooltipTrigger>
-                  <TooltipContent side="bottom" className="text-xs font-medium">
-                    Document options
+                  <TooltipContent
+                    side="bottom"
+                    className="text-xs font-medium mt-4 "
+                  >
+                    Select tabs
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </Button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent
             className="w-48 rounded-lg border border-gray-100 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800"
             align="end"
             sideOffset={4}
           >
-            {mockData.map((item) => (
-              <DropdownMenuItem
-                key={item.id}
-                onClick={() => toggleItem("options", item)}
-                className={`px-3 py-2 text-sm transition-colors focus:bg-gray-100 dark:focus:bg-gray-700 ${
-                  selectedTabs.options?.some((tab) => tab.id === item.id)
-                    ? "bg-indigo-50/60 text-indigo-500 dark:bg-gray-700/80 dark:text-indigo-400"
-                    : "text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700/50"
-                }`}
-              >
-                {item.label}
-              </DropdownMenuItem>
-            ))}
+            {/* Select All Checkbox with Tooltip */}
+                  <DropdownMenuItem
+                    onClick={() => {
+                      const selectedIds =
+                        selectedTabs.options?.map((tab) => tab.id) || [];
+                      const isAllSelected = mockData.every((item) =>
+                        selectedIds.includes(item.id)
+                      );
+
+                      if (isAllSelected) {
+                        mockData.forEach((item) =>
+                          toggleItem("options", item, false)
+                        );
+                      } else {
+                        mockData.forEach((item) => {
+                          if (!selectedIds.includes(item.id)) {
+                            toggleItem("options", item, true);
+                          }
+                        });
+                      }
+                    }}
+                    className="p-2 text-sm flex items-center gap-2 text-muted-foreground font-medium hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700/50"
+                  >
+                    <input
+                      type="checkbox"
+                      ref={(el) => {
+                        if (el) {
+                          const selectedIds =
+                            selectedTabs.options?.map((tab) => tab.id) || [];
+                          const isAllSelected = mockData.every((item) =>
+                            selectedIds.includes(item.id)
+                          );
+                          const isSomeSelected = mockData.some((item) =>
+                            selectedIds.includes(item.id)
+                          );
+
+                          el.checked = isAllSelected;
+                          el.indeterminate = !isAllSelected && isSomeSelected; // Partial selection state
+                        }
+                      }}
+                      className="h-4 w-4 cursor-pointer accent-gray-600/50"
+                    />
+                    Select All
+                  </DropdownMenuItem>
+
+            {/* Individual Checkboxes with Tooltips */}
+            <div className="flex flex-col gap-1">
+              {mockData.map((item) => (
+                <DropdownMenuItem
+                  key={item.id}
+                  onClick={() => toggleItem("options", item)}
+                  className={`p-2 text-sm flex items-center gap-2 text-muted-foreground font-medium transition-colors focus:bg-gray-100 dark:focus:bg-gray-700 ${
+                    selectedTabs.options?.some((tab) => tab.id === item.id)
+                      ? "bg-gray-200/60 dark:bg-gray-700/80 "
+                      : "hover:bg-gray-100/80 dark:hover:bg-gray-100/80"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedTabs.options?.some(
+                      (tab) => tab.id === item.id
+                    )}
+                    readOnly
+                    className="h-4 w-4 cursor-pointer accent-gray-600/50"
+                  />
+                  {item.label}
+                </DropdownMenuItem>
+              ))}
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
 

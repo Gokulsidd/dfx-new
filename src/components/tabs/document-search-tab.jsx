@@ -1,25 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Search,
-  PanelLeft,
-  Plus,
-  FileText,
-  File,
-  FileSpreadsheet,
-  FileImage,
-  FileArchive,
-  FileCode,
-  FileAudio,
-  FileVideo,
-  FilePlus2,
-  FileUp,
-  Option,
-  OptionIcon,
-  EllipsisVertical,
-} from "lucide-react";
-
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
@@ -31,43 +12,20 @@ import {
 } from "../ui/tooltip";
 
 import useStore from "@/store/useStore";
-import { mockData } from "@/lib/constants";
+import { getFileIcon, mockData, successToastObj } from "@/lib/constants";
 
 import UploadDocument from "../uploadDocuments/upload-document";
 import AddSource from "../addSource/add-source";
 import { Checkbox } from "../ui/checkbox";
-
-// File icon mapping
-const getFileIcon = (extension, fileName) => {
-  switch (extension.toLowerCase()) {
-    case "pdf":
-      return <FileText className="w-5 h-5 text-red-500" />;
-    case "docx":
-    case "doc":
-      return <FileText size={16} className="text-blue-500" />;
-    case "xlsx":
-    case "xls":
-      return <FileSpreadsheet className="w-5 h-5 text-green-500" />;
-    case "jpg":
-    case "jpeg":
-    case "png":
-    case "gif":
-      return <FileImage className="w-5 h-5 text-purple-500" />;
-    case "zip":
-    case "rar":
-      return <FileArchive className="w-5 h-5 text-yellow-500" />;
-    case "txt":
-      return <FileCode className="w-5 h-5 text-gray-500" />;
-    case "mp3":
-    case "wav":
-      return <FileAudio className="w-5 h-5 text-pink-500" />;
-    case "mp4":
-    case "mov":
-      return <FileVideo className="w-5 h-5 text-indigo-500" />;
-    default:
-      return <File className="w-5 h-5 text-gray-400" />;
-  }
-};
+import { EllipsisVertical, PanelLeft, Plus } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { toast } from "sonner";
+import { Toaster } from "../ui/sonner";
 
 const DocumentSearchTab = ({ title, content }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -93,6 +51,11 @@ const DocumentSearchTab = ({ title, content }) => {
     }
   }, [mockData]);
 
+  const handleCopyName = (name) => {
+    navigator.clipboard.writeText(name);
+    toast.success("copied to clipboard !", successToastObj)
+  };
+
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -114,7 +77,7 @@ const DocumentSearchTab = ({ title, content }) => {
       className={`text-slate-800 bg-white w-full flex flex-col gap-2 rounded-2xl shadow-lg transition-all ease-in-out duration-300 ${
         isCollapsed
           ? "h-[50px] md:h-full w-full md:min-w-[60px] md:w-[60px]"
-          : "min-w-[300px] md:min-w-[400px] md:w-[40%] h-full"
+          : "min-w-[300px] md:min-w-[430px] md:w-[40%] h-full"
       }`}
     >
       <CardHeader>
@@ -195,19 +158,19 @@ const DocumentSearchTab = ({ title, content }) => {
             <AddSource />
           </div>
           <div className="w-full flex flex-col rounded-2xl px-2 md:px-4">
-            <div className="flex flex-col h-[300px] md:h-[400px] overflow-y-hidden hover:overflow-y-scroll rounded-2xl rounded-t-none px-2 py-1 space-y-1 bg-white relative">
-              {/* {documents && (
-                <div className="text-muted-foreground font-medium text-sm mb-4">
-                  Added Sources
-                </div>
-              )} */}
+            {documents && (
+              <div className="w-full  text-muted-foreground font-semibold text-sm mb-2">
+                Select Document
+              </div>
+            )}
+            <div className="flex flex-col h-[300px] md:h-[470px] overflow-y-hidden hover:overflow-y-scroll rounded-2xl rounded-t-none py-1 space-y-1 bg-white relative">
               {documents ? (
                 documents.map((item) => (
                   <div
                     key={item.id}
                     onClick={() => handleSelectDocument(item)}
                     className={`
-                      flex items-center justify-between gap-3 px-4 py-2 rounded-xl cursor-pointer
+                      flex items-center justify-between gap-3 px-2 py-2 rounded-xl cursor-pointer
                       transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] 
                       border border-transparent
                       group
@@ -218,30 +181,57 @@ const DocumentSearchTab = ({ title, content }) => {
                       }
                     `}
                   >
-                    <div className="w-full flex gap-4 justify-between items-center">
+                    <div className="w-[330px] flex gap-4 justify-between items-center">
                       <div className="flex items-center gap-3 min-w-0">
                         <div>{getFileIcon(item.extension, item.name)}</div>
 
                         {/* Marquee container */}
-                        <div className="max-w-[250px] overflow-x-scroll">
-                          <p className="text-sm text-muted-foreground font-medium whitespace-nowrap">
+                        <div className="max-w-full overflow-x-scroll">
+                          <p className="text-sm pr-2 text-muted-foreground font-medium whitespace-nowrap">
                             {item.name}
                           </p>
                         </div>
                       </div>
-                      {/* <TooltipProvider>
+                      <TooltipProvider>
                         <Tooltip>
-                          <TooltipTrigger asChild>
-                            <EllipsisVertical
-                              size={30}
-                              className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-200/70 rounded-full p-1"
-                            />
-                          </TooltipTrigger>
-                          <TooltipContent side="bottom" className={"mt-2"}>
-                            more
-                          </TooltipContent>
+                          <DropdownMenu>
+                            <TooltipTrigger asChild>
+                              <DropdownMenuTrigger asChild>
+                                <EllipsisVertical
+                                  size={30}
+                                  className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-200/70 rounded-full p-1 cursor-pointer"
+                                  onClick={(event) => {
+                                    event.stopPropagation(); // Prevents parent click from triggering
+                                  }}
+                                />
+                              </DropdownMenuTrigger>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom" className="mt-2">
+                              More
+                            </TooltipContent>
+                            <DropdownMenuContent
+                              align="right"
+                              className="w-40 md:ml-24 translate-x-4 text-muted-foreground font-medium text-sm"
+                            >
+                              <DropdownMenuItem
+                                onClick={(event) => {
+                                  event.stopPropagation(); // Also prevent propagation inside menu
+                                  handleCopyName(item.name);
+                                }}
+                                className="hover:bg-gray-100/80"
+                              >
+                                Copy Name
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                className="text-red-600/70 hover:bg-red-100"
+                                onClick={(event) => event.stopPropagation()} // Prevent propagation here too
+                              >
+                                Remove Document
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </Tooltip>
-                      </TooltipProvider> */}
+                      </TooltipProvider>
                     </div>
                   </div>
                 ))
@@ -261,6 +251,7 @@ const DocumentSearchTab = ({ title, content }) => {
           </div>
         </CardContent>
       )}
+      <Toaster className='bg-green-500' />
     </Card>
   );
 };
