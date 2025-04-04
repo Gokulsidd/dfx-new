@@ -28,13 +28,14 @@ import { toast } from "sonner";
 import { Toaster } from "../ui/sonner";
 
 const DocumentSearchTab = ({ title, content }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [documents, setDocuments] = useState([]);
   const {
     selectedDocumentId,
     setSelectedDocumentId,
     toggleItem,
     documentsList,
+    isCollapsed,
+    setIsCollapsed
   } = useStore();
 
   useEffect(() => {

@@ -1,4 +1,3 @@
-import { mockTabsData } from "@/lib/constants";
 import { create } from "zustand";
 
 const useStore = create((set) => ({
@@ -10,7 +9,8 @@ const useStore = create((set) => ({
   apiError: null,
   loading: true,
   IsAddSourceDialogOpen : false,
-  isCollapsed: false,
+    isCollapsed: false,
+  setIsCollapsed: (value) => set({ isCollapsed: value }),
 
   /**
    * Fetches user details from the API.
@@ -124,23 +124,6 @@ const useStore = create((set) => ({
     }
   },
 
-
-  setIsCollapsed: (value) =>
-    set((state) => {
-      let updatedTabs = { ...state.selectedTabs };
-      // When collapsing is disabled (isCollapsed = false), remove the "Chat" tab
-      if (!value && updatedTabs.options.length === 3) {
-        updatedTabs.options = updatedTabs.options.filter((tab) => tab.id !== 3); // Assuming "Chat" has id: 3
-      }else if(value && updatedTabs.options.length === 3) {
-        updatedTabs.options = mockTabsData
-      }
-  
-      return {
-        isCollapsed: value,
-        selectedTabs: updatedTabs,
-      };
-    }),
-
   /**
    * Toggles an item in the selectedTabs category.
    */
@@ -150,7 +133,7 @@ const useStore = create((set) => ({
       const updatedItems = categoryItems.some((i) => i.id === item.id)
         ? categoryItems.filter((i) => i.id !== item.id)
         : [...categoryItems, item];
-        const shouldCollapse = updatedItems.length === 3 ? true : state.isCollapsed;
+        const shouldCollapse = updatedItems.length === 3;
       return {
         selectedTabs: {
           ...state.selectedTabs,
