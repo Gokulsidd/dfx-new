@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono, Open_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import AppInitializer from "@/components/AppInitializer";
+import { Suspense } from "react";
 
 
 const openSans = Open_Sans({
@@ -14,13 +16,17 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${openSans.variable} font-[family-name:var(--font-open-sans)] antialiased overflow-hidden`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange > 
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >
+          <Suspense>
+          <AppInitializer />
+          </Suspense> 
+          {children}
         </ThemeProvider>
       </body>
     </html>

@@ -17,7 +17,7 @@ import { getFileIcon, mockData, successToastObj } from "@/lib/constants";
 import UploadDocument from "../uploadDocuments/upload-document";
 import AddSource from "../addSource/add-source";
 import { Checkbox } from "../ui/checkbox";
-import { EllipsisVertical, PanelLeft, Plus } from "lucide-react";
+import { EllipsisVertical, FileText, PanelLeft, Plus } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,7 +35,7 @@ const DocumentSearchTab = ({ title, content }) => {
     toggleItem,
     documentsList,
     isCollapsed,
-    setIsCollapsed
+    setIsCollapsed,
   } = useStore();
 
   useEffect(() => {
@@ -62,6 +62,7 @@ const DocumentSearchTab = ({ title, content }) => {
   };
 
   const handleSelectDocument = (item) => {
+    console.log(item.id, selectedDocumentId)
     if (selectedDocumentId === item.id) {
       setSelectedDocumentId(null);
       return;
@@ -69,9 +70,10 @@ const DocumentSearchTab = ({ title, content }) => {
     console.log(item);
     setSelectedDocumentId(item.id);
   };
+  console.log(selectedDocumentId)
 
   // Get selected document name for collapsed view
-  const selectedDoc = documents.find((doc) => doc.id === selectedDocumentId);
+  const selectedDoc = documents?.find((doc) => doc.id === selectedDocumentId);
 
   return (
     <Card
@@ -127,17 +129,7 @@ const DocumentSearchTab = ({ title, content }) => {
       </CardHeader>
       {isCollapsed ? (
         <CardContent className="md:flex flex-col justify-center items-center gap-3">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="icon"
-                className="hover:bg-gray-200/70 bg-gray-100"
-              >
-                <Plus size={18} className="text-muted-foreground" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">Add Source</TooltipContent>
-          </Tooltip>
+          <AddSource />
           {selectedDocumentId && selectedDoc && (
             <TooltipProvider>
               <Tooltip>
@@ -159,13 +151,13 @@ const DocumentSearchTab = ({ title, content }) => {
             <AddSource />
           </div>
           <div className="w-full flex flex-col rounded-2xl px-2 md:px-4">
-            {documents && (
+            {documents.length > 0 && (
               <div className="w-full  text-muted-foreground font-semibold text-sm mb-2">
-                Select Document
+                Select a document
               </div>
             )}
-            <div className="flex flex-col h-[300px] md:h-[470px] overflow-y-hidden hover:overflow-y-scroll rounded-2xl rounded-t-none py-1 space-y-1 bg-white relative">
-              {documents ? (
+            <div className={`flex flex-col h-[300px] md:h-[470px] overflow-y-hidden ${documents.length > 0 && 'hover:overflow-y-scroll'} rounded-2xl rounded-t-none py-1 space-y-1 bg-white relative`}>
+              {documents.length > 0 ? (
                 documents.map((item) => (
                   <div
                     key={item.id}
@@ -252,7 +244,7 @@ const DocumentSearchTab = ({ title, content }) => {
           </div>
         </CardContent>
       )}
-      <Toaster className='bg-green-500' />
+      <Toaster />
     </Card>
   );
 };

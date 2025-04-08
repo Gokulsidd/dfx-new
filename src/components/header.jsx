@@ -16,7 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
-import { mockTabsData, mockUserData } from "@/lib/constants";
+import { getMockTabsResponse, tabsList, mockUserData } from "@/lib/constants";
 
 
 
@@ -29,6 +29,9 @@ const Header = () => {
     fetchUser,
     setUser,
     selectedDocumentId,
+    fetchTabsListForDashboard,
+    dashboardId,
+    tabsList
   } = useStore();
 
   const [loading, setLoading] = useState(true);
@@ -40,17 +43,20 @@ const Header = () => {
   };
 
   useEffect(() => {
+    // const mockTabs = getMockTabsResponse()
+    // setTabsList(mockTabs?.dashboardPageColumn)
+    fetchTabsListForDashboard()
     getUser();
-  }, []);
+  }, [dashboardId]);
 
   const handleSelectAll = () => {
     const selectedIds = selectedTabs.options?.map((tab) => tab.id) || [];
-    const isAllSelected = mockTabsData.every((item) => selectedIds.includes(item.id));
-
+    const isAllSelected = tabsList?.every((item) => selectedIds.includes(item.id));
+   
     if (isAllSelected) {
-      mockTabsData.forEach((item) => toggleItem("options", item, false));
+      tabsList?.forEach((item) => toggleItem("options", item, false));
     } else {
-      mockTabsData.forEach((item) => {
+      tabsList?.forEach((item) => {
         if (!selectedIds.includes(item.id)) {
           toggleItem("options", item, true);
         }
@@ -63,7 +69,7 @@ const Header = () => {
   };
 
   return (
-    <div className="w-full flex justify-between items-center px-2 pr-4 py-2">
+    <div className="w-full flex justify-between items-center px-2 pr-4 py-1">
       <div>
         <h1 className="text-md font-extrabold tracking-wider text-white py-1 px-3 bg-gray-900 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] border border-gray-700 relative overflow-hidden">
           <span className="absolute inset-0 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 opacity-40"></span>
@@ -119,10 +125,10 @@ const Header = () => {
                         if (el) {
                           const selectedIds =
                             selectedTabs.options?.map((tab) => tab.id) || [];
-                          const isAllSelected = mockTabsData.every((item) =>
+                          const isAllSelected = tabsList?.every((item) =>
                             selectedIds.includes(item.id)
                           );
-                          const isSomeSelected = mockTabsData.some((item) =>
+                          const isSomeSelected = tabsList?.some((item) =>
                             selectedIds.includes(item.id)
                           );
 
@@ -130,20 +136,21 @@ const Header = () => {
                           el.indeterminate = !isAllSelected && isSomeSelected; // Partial selection state
                         }
                       }}
-                      className="h-4 w-4 cursor-pointer accent-gray-600/50"
+                      className="h-3 w-3 cursor-pointer accent-gray-600/50"
                     />
                     Select All
                   </DropdownMenuItem>
 
             {/* Individual Checkboxes with Tooltips */}
             <div className="flex flex-col gap-1">
-              {mockTabsData.map((item) => (
+              {console.log(tabsList)}
+              {tabsList?.map((item) => (
                 <DropdownMenuItem
                   key={item.id}
                   onClick={() => toggleItem("options", item)}
                   className={`p-2 text-sm flex items-center gap-2 text-muted-foreground font-medium transition-colors focus:bg-gray-100 dark:focus:bg-gray-700 ${
                     selectedTabs.options?.some((tab) => tab.id === item.id)
-                      ? "bg-gray-200/60 dark:bg-gray-700/80 "
+                      ? "bg-gray-100 dark:bg-gray-700/80 "
                       : "hover:bg-gray-100/80 dark:hover:bg-gray-100/80"
                   }`}
                 >
@@ -153,9 +160,10 @@ const Header = () => {
                       (tab) => tab.id === item.id
                     )}
                     readOnly
-                    className="h-4 w-4 cursor-pointer accent-gray-600/50"
+                    className="h-3 w-3 cursor-pointer accent-gray-600/50"
                   />
-                  {item.label}
+                  {item.name}
+                  {console.log(item)}
                 </DropdownMenuItem>
               ))}
             </div>

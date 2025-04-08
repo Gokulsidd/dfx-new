@@ -13,54 +13,85 @@ import {
 import AddSourceDropdown from "./add-source-dropDown";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import useStore from "@/store/useStore";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { Plus } from "lucide-react";
 
 const AddSourceDialog = () => {
   const [tags, setTags] = useState([]);
-  const [open, setOpen] = useState(false);
-  const { setDocumentsList } = useStore();
+  const {
+    setDocumentsList,
+    isAddSourceDialogOpen,
+    setAddSourceDialog,
+    isCollapsed,
+  } = useStore();
 
   const handleSearchClick = async () => {
     await setDocumentsList(tags);
-    setOpen(false);
+    setAddSourceDialog(false);
   };
 
   const handleClearClick = () => {
     setTags([]);
   };
 
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isAddSourceDialogOpen} onOpenChange={setAddSourceDialog}>
       <div className="w-full text-center">
-        <DialogTrigger asChild >
-          <TooltipProvider >
-            <Tooltip asChild>
-              <TooltipTrigger asChild className='w-full'>
+        <DialogTrigger asChild>
+          {isCollapsed ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button
-                  variant="outline"
-                  onClick={() => setOpen(true)}
-                  className="w-full h-10 font-semibold text-sm text-muted-foreground hover:bg-indigo-50/50 rounded-full hover:border-gray-300"
+                  variant="icon"
+                  className="hover:bg-gray-200/70 bg-gray-100"
+                  onClick={() => {
+                    console.log("Button clicked");
+                    setAddSourceDialog(true);
+                  }}
                 >
-                  <span className="text-xl">+</span> Add Source
+                  <Plus size={18} className="text-muted-foreground" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className={'mt-2'}>add source</TooltipContent>
+              <TooltipContent side="right">Add Source</TooltipContent>
             </Tooltip>
-          </TooltipProvider>
+          ) : (
+            <TooltipProvider>
+              <Tooltip asChild>
+                <TooltipTrigger asChild className="w-full">
+                  <Button
+                    variant="outline"
+                    onClick={() => setAddSourceDialog(true)}
+                    className="w-full h-10 font-semibold text-sm text-muted-foreground hover:bg-gray-100 rounded-full hover:border-gray-300"
+                  >
+                    <span className="text-xl">+</span> Add Source
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className={"mt-2"}>
+                  add source
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </DialogTrigger>
       </div>
       <DialogContent
         aria-describedby={undefined}
-        className="w-full md:max-w-lg h-[60%] flex flex-col gap-1 p-2 md:p-4 bg-white"
+        className="w-full md:max-w-lg h-[60%] flex flex-col gap-1 p-2 md:p-4 bg-gray-50"
       >
         <DialogHeader className="flex items-start h-fit p-2">
-          <DialogTitle className="text-muted-foreground font-medium text-lg">
+          <DialogTitle className="text-muted-foreground font-medium text-lg hidden">
             Add Source
           </DialogTitle>
         </DialogHeader>
         <div className="w-full flex justify-center items-start flex-1">
           <Tabs defaultValue="MyDocuments" className="w-full h-full">
-            <TabsList className="w-full h-13 flex justify-center overflow-x-auto overflow-y-hidden">
+            <TabsList className="w-full h-13 flex justify-center overflow-x-auto overflow-y-hidden bg-gray-50">
               <TabsTrigger value="input" className="whitespace-nowrap">
                 Document IDs
               </TabsTrigger>
@@ -76,13 +107,14 @@ const AddSourceDialog = () => {
               <TagInput value={tags} onChange={setTags} />
               <div className="w-full flex gap-3 justify-end items-center">
                 <Button
-                  className="bg-indigo-900/70 text-slate-50 w-fit px-4 py-2 float-right hover:bg-indigo-900/80 rounded-2xl"
+                variant={'outline'}
+                  className="text-muted-foreground text-sm hover:bg-gray-200"
                   onClick={handleClearClick}
                 >
                   Clear
                 </Button>
                 <Button
-                  className="bg-indigo-900/70 text-slate-50 w-fit px-4 py-2 float-right hover:bg-indigo-900/80 rounded-2xl"
+                  className="bg-gray-900/90 text-sm text-slate-50 w-fit px-4 py-2 float-right hover:bg-gray-900 rounded-2xl"
                   onClick={handleSearchClick}
                 >
                   Search

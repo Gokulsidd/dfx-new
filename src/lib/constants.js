@@ -1,53 +1,138 @@
+import useStore from "@/store/useStore";
 import Image from "next/image";
 
+// const { selectedDocumentId } = useStore()
+
 export const getFileIcon = (extension, fileName) => {
-  const iconProps = { width: 24, height: 30, alt: fileName };
+  const iconProps = { width: 0, height: 0, alt: fileName };
 
   switch (extension.toLowerCase()) {
     // Documents (Separated)
     case "pdf":
-      return <Image src="/pdf.png" alt="pdf" {...iconProps} />;
-    case "docx":
-      return <Image src="/docx-file.png" alt="docx" {...iconProps} />;
+      return (
+        <Image
+          src="/pdf.svg"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
     case "doc":
-      return <Image src="/doc-file.png" alt="doc" {...iconProps} />;
+    case "docx":
     case "docm":
-      return <Image src="/docm-file.png" alt="docm" {...iconProps} />;
+    case "dot":
+    case "dotx":
+      return (
+        <Image
+          src="/word.svg"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
     case "rtf":
-      return <Image src="/rtf.png" alt="rtf" {...iconProps} />;
+      return (
+        <Image
+          src="/rtf.png"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
 
     // Spreadsheets (Separated)
-    case "xlsx":
-      return <Image src="/xlsx-file.png" alt="xlsx" {...iconProps} />;
-    case "xls":
-      return <Image src="/csv-file.png" alt="xls" {...iconProps} />;
-    case "xlsm":
-      return <Image src="/csv-file.png" alt="xlsm" {...iconProps} />;
     case "csv":
-      return <Image src="/csv-file.png" alt="csv" {...iconProps} />;
+    case "xla":
+    case "xlam":
+    case "xll":
+    case "xlm":
+    case "xls":
+    case "xlsm":
+    case "xlsx":
+    case "xlt":
+    case "xltm":
+    case "xltx":
+      return (
+        <Image
+          src="/csv.svg"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
 
     // Presentations (Separated)
-    case "pptx":
-      return <Image src="/pptx-file.png" alt="pptx" {...iconProps} />;
     case "ppt":
-      return <Image src="/ppt-file.png" alt="ppt" {...iconProps} />;
+    case "pot":
+    case "potm":
+    case "potx":
+    case "ppam":
+    case "ppam":
+    case "ppsm":
+    case "ppsx":
     case "pptm":
-      return <Image src="/pptx-file.png" alt="pptm" {...iconProps} />;
+    case "pptx":
+    case "sldm":
+    case "sldx":
+      return (
+        <Image
+          src="/ppt.svg"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
 
     // Images (Grouped)
     case "jpg":
+      return (
+        <Image
+          src="/jpg.svg"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
     case "jpeg":
-      return <Image src="/jpg.png" alt="jpg" {...iconProps} />;
+      return (
+        <Image
+          src="/jpeg.svg"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
     case "png":
-      return <Image src="/png.svg" alt="png" {...iconProps} />;
+      return (
+        <Image
+          src="/png.svg"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
     case "gif":
-      return <Image src="/gif.png" alt="gif" {...iconProps} />;
+      return (
+        <Image
+          src="/gif.png"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
     case "svg":
     case "bmp":
     case "webp":
     case "tiff":
     case "tif":
-      return <Image src="/jpg.png" alt="svg" {...iconProps} />;
+      return (
+        <Image
+          src="/jpg.png"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
 
     // Archives (Grouped)
     case "zip":
@@ -55,11 +140,25 @@ export const getFileIcon = (extension, fileName) => {
     case "7z":
     case "tar":
     case "gz":
-      return <Image src="/zip.png" alt="zip" {...iconProps} />;
+      return (
+        <Image
+          src="/zip.svg"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
 
     // Code/Data (Grouped)
     case "txt":
-      return <Image src="/txt.png" alt="txt" {...iconProps} />;
+      return (
+        <Image
+          src="/txt.svg"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
     case "json":
     case "xml":
     case "html":
@@ -71,11 +170,25 @@ export const getFileIcon = (extension, fileName) => {
     case "tsx":
     case "py":
     case "java":
-      return <Image src="/coding.png" alt="codeFile" {...iconProps} />;
+      return (
+        <Image
+          src="/coding.png"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
 
     // Default fallback icon
     default:
-      return <Image src="/file.png" alt="file" {...iconProps} />;
+      return (
+        <Image
+          src="/file.svg"
+          style={{ width: "20px", height: "auto" }}
+          {...iconProps}
+          unoptimized
+        />
+      );
   }
 };
 
@@ -115,7 +228,7 @@ export const mockData = {
       LastModifiedBy: "User6",
       DownloadFilePath: "\\\\Server\\Files\\Project_Scientific_Findings_2.docx",
       PageCount: 19,
-      Size: 3842827,
+      Size: 3842027,
       RepoName: "MainRepository",
       CheckedOutBy: null,
       URL: "https://demo.example.com/doc/1002",
@@ -151,7 +264,7 @@ export const mockData = {
       Name: "Analysis_4.csv",
       MIME: "text/csv",
       Extension: "csv",
-      CreationDateTime: "2024-10-28T13:55:12",
+      CreationDateTime: "2024-10-20T13:55:12",
       LastModifiedDateTime: "2024-11-09T13:55:12",
       CreatedBy: "User9",
       LastModifiedBy: "User6",
@@ -322,7 +435,7 @@ export const mockData = {
       Name: "Analysis_12.pptx",
       MIME: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
       Extension: "pptx",
-      CreationDateTime: "2025-03-28T13:55:12",
+      CreationDateTime: "2025-03-20T13:55:12",
       LastModifiedDateTime: "2025-04-01T13:55:12",
       CreatedBy: "User1",
       LastModifiedBy: "User1",
@@ -394,7 +507,7 @@ export const mockData = {
       DownloadFilePath:
         "\\\\Server\\Files\\Project_Marketing_Requirements_15.xls",
       PageCount: 0,
-      Size: 1487281,
+      Size: 1487201,
       RepoName: "MainRepository",
       CheckedOutBy: null,
       URL: "https://demo.example.com/doc/1015",
@@ -415,7 +528,7 @@ export const mockData = {
       LastModifiedBy: "User7",
       DownloadFilePath: "\\\\Server\\Files\\Analysis_Sales_Results_16.bmp",
       PageCount: 0,
-      Size: 9988528,
+      Size: 9988520,
       RepoName: "MainRepository",
       CheckedOutBy: null,
       URL: "https://demo.example.com/doc/1016",
@@ -1307,7 +1420,7 @@ export const mockUserData = {
             WriteValue: false,
             WriteValueOnce: false,
             PropType: "String",
-            ID: 128,
+            ID: 120,
             DynamicList: null,
             ParentField: null,
             Data: null,
@@ -4161,7 +4274,7 @@ export const mockUserData = {
         WriteValue: false,
         WriteValueOnce: false,
         PropType: "String",
-        ID: 128,
+        ID: 120,
         DynamicList: null,
         ParentField: null,
         Data: null,
@@ -5721,7 +5834,7 @@ export const mockUserData = {
         ColumnDetailMasterId: 0,
         AjaxLoader: false,
         HasData: false,
-        Id: 28,
+        Id: 20,
         QueryName: "Client_Document_Jersey_Trust",
         Query:
           "select * from DFXApp_LF_Metadata.dbo.Client_Document_Jersey_Trust",
@@ -6199,7 +6312,7 @@ export const mockUserData = {
         HasSecurity: false,
       },
       {
-        ID: 4028,
+        ID: 4020,
         MenuName: "Star",
         ParentID: 0,
         scriptfile: null,
@@ -6874,7 +6987,7 @@ export const mockUserData = {
         Seperator: true,
         Extension: null,
         iconfile: null,
-        menuorder: 28,
+        menuorder: 20,
         functionname: null,
         functionenable: null,
         ChildMenu: [],
@@ -6889,7 +7002,7 @@ export const mockUserData = {
         Seperator: false,
         Extension: null,
         iconfile: null,
-        menuorder: 28,
+        menuorder: 20,
         functionname: "openContainingFolder",
         functionenable: null,
         ChildMenu: [],
@@ -7302,7 +7415,7 @@ export const mockUserData = {
         Seperator: true,
         Extension: null,
         iconfile: null,
-        menuorder: 28,
+        menuorder: 20,
         functionname: null,
         functionenable: null,
         ChildMenu: [],
@@ -7536,7 +7649,7 @@ export const mockUserData = {
         HasSecurity: false,
       },
       {
-        ID: 4028,
+        ID: 4020,
         MenuName: "Star",
         ParentID: 0,
         scriptfile: null,
@@ -7679,7 +7792,7 @@ export const mockUserData = {
         Seperator: false,
         Extension: null,
         iconfile: null,
-        menuorder: 28,
+        menuorder: 20,
         functionname: "openContainingFolder",
         functionenable: null,
         ChildMenu: [],
@@ -8137,6 +8250,47 @@ export const mockUserData = {
   Name: null,
 };
 
+export const getMockTabsResponse = (selectedDocumentId) => ({
+  id: 1002,
+  name: "DFX WorkSpace",
+  status: "A",
+  result: "Success",
+  dashboardPageSecurity: [],
+  dashboardPageColumn: [
+    {
+      id: 1004,
+      dashboardPageID: 1002,
+      seq: 2,
+      name: "Metadata",
+      url: 'http://localhost/DFXDMSLite/dfxwebapp_demo/Email/MailProperty?id=${selectedDocumentId}&application=next',
+    },
+    {
+      id: 1005,
+      dashboardPageID: 1002,
+      seq: 1,
+      name: "Preview",
+      url: 'http://localhost/DFXDMSLite/dfxsync_demo/ApryseDoc/Index?id=${selectedDocumentId}&repository=${REPO_NAME}&readonlyflag=1&newfile=A6vxMjA7.dat&docpreview=1&FileName=VEVTVCAoOCkuZG9jeA==',
+    },
+    {
+      id: 1006,
+      dashboardPageID: 1002,
+      seq: 3,
+      name: "Chat",
+      url: 'http://10.115.14.14/dfxsearch/dfxchat/${selectedDocumentId}',
+    },
+    // {
+    //   id: 1007,
+    //   dashboardPageID: 1002,
+    //   seq: 4,
+    //   name: "Action",
+    //   url: `http://10.115.14.14/dfxsearch/dfxchat/${selectedDocumentId}`,
+    // },
+  ],
+  errorMessage: null,
+  dataID: 0,
+  dataPath: null,
+  data: null,
+});
 export const successToastObj = {
   style: {
     backgroundColor: "#daf1db",
