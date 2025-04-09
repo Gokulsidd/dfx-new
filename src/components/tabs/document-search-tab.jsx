@@ -57,6 +57,11 @@ const DocumentSearchTab = ({ title, content }) => {
     toast.success("copied to clipboard !", successToastObj)
   };
 
+  const handleRemoveDocument = (id) => {
+    setDocuments(prevDocuments => prevDocuments.filter(doc => doc.id !== id));
+    toast.success("Document removed successfully !", successToastObj);
+  }
+
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -217,7 +222,10 @@ const DocumentSearchTab = ({ title, content }) => {
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 className="text-red-600/70 hover:bg-red-100"
-                                onClick={(event) => event.stopPropagation()} // Prevent propagation here too
+                                onClick={(event) => {
+                                  event.stopPropagation()
+                                  handleRemoveDocument(item.id)
+                                }} // Prevent propagation here too
                               >
                                 Remove Document
                               </DropdownMenuItem>

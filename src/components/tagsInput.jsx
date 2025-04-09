@@ -23,6 +23,37 @@ export default function TagInput({
     }
   };
 
+  const cleanInput = (input) => {
+    try {
+      const parsed = JSON.parse(input);
+      if (Array.isArray(parsed)) {
+        return parsed.map(String).join(",");
+      }
+    } catch (e) {}
+
+    return input
+      .replace(/^["'\[{]+|["'\]}]+$/g, '')
+      .replace(/["'\]]/g, '')
+      .replace(/\s*,\s*/g, ',')
+      .replace(/\n/g, ',')
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
+
+  const addMultipleTags = (tagString) => {
+    const cleanedInput = cleanInput(tagString);
+    const newTags = cleanedInput
+      .split(",")
+      .map(tag => tag.trim())
+      .filter(tag => tag && !tags.includes(tag));
+    
+    if (newTags.length) {
+      const updatedTags = [...tags, ...newTags];
+      setTags(updatedTags);
+      onChange?.(updatedTags);
+    }
+  };
+
   const removeTag = (index) => {
     const updatedTags = tags.filter((_, i) => i !== index);
     setTags(updatedTags);
@@ -32,7 +63,11 @@ export default function TagInput({
   const handleKeyDown = (e) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
-      addTag(inputValue);
+      if (/[,"'\[\]]/.test(inputValue)) {
+        addMultipleTags(inputValue);
+      } else {
+        addTag(inputValue);
+      }
       setInputValue("");
     } else if (e.key === "Backspace" && inputValue === "" && tags.length) {
       removeTag(tags.length - 1);
@@ -40,16 +75,10 @@ export default function TagInput({
   };
 
   const handlePaste = (e) => {
-    const paste = e.clipboardData.getData("text");
-    const pastedTags = paste.split(",").map((t) => t.trim());
-    const newTags = pastedTags.filter((tag) => tag && !tags.includes(tag));
-    if (newTags.length > 0) {
-      const updatedTags = [...tags, ...newTags];
-      setTags(updatedTags);
-      onChange?.(updatedTags);
-    }
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData('text');
+    addMultipleTags(pasteData);
     setInputValue("");
-    e.preventDefault(); // avoid pasting the entire string into input
   };
 
   return (

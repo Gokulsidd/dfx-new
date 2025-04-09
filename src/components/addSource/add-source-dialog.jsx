@@ -20,9 +20,11 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { Plus } from "lucide-react";
+import Loader from "../loader";
 
 const AddSourceDialog = () => {
   const [tags, setTags] = useState([]);
+  const [loading, setLoading] =useState(false)
   const {
     setDocumentsList,
     isAddSourceDialogOpen,
@@ -32,10 +34,17 @@ const AddSourceDialog = () => {
   } = useStore();
 
   const handleSearchClick = async () => {
-    console.log(tags)
-    const columnDetailMasterId = user?.User.ColumnDetailMaster[0].Id
-    await setDocumentsList(tags,columnDetailMasterId );
-    setAddSourceDialog(false);
+    setLoading(true)
+    try{
+      const columnDetailMasterId = user?.User.ColumnDetailMaster[0].Id
+      await setDocumentsList(tags,columnDetailMasterId );
+      setAddSourceDialog(false);
+    }catch(error){
+      throw new Error(error)
+    }finally{
+      setLoading(false)
+      setTags([])
+    }
   };
 
   const handleClearClick = () => {
@@ -85,7 +94,7 @@ const AddSourceDialog = () => {
       </div>
       <DialogContent
         aria-describedby={undefined}
-        className="w-full md:max-w-lg h-[60%] flex flex-col gap-1 p-2 md:p-4 bg-gray-50"
+        className="w-full md:max-w-lg md:h-[380px] flex flex-col gap-1 p-2 md:p-4 bg-gray-50"
       >
         <DialogHeader className="flex items-start h-fit p-2">
           <DialogTitle className="text-muted-foreground font-medium text-lg hidden">
@@ -98,9 +107,9 @@ const AddSourceDialog = () => {
               <TabsTrigger value="input" className="whitespace-nowrap">
                 Document IDs
               </TabsTrigger>
-              <TabsTrigger value="selectPack" className="whitespace-nowrap">
+              {/* <TabsTrigger value="selectPack" className="whitespace-nowrap">
                 Select Pack
-              </TabsTrigger>
+              </TabsTrigger> */}
             </TabsList>
 
             <TabsContent
@@ -117,10 +126,10 @@ const AddSourceDialog = () => {
                   Clear
                 </Button>
                 <Button
-                  className="bg-gray-900/90 text-sm text-slate-50 w-fit px-4 py-2 float-right hover:bg-gray-900 rounded-2xl"
+                  className="bg-gray-900/90 text-sm text-slate-50 w-fit min-w-[80px] px-4 py-2 float-right hover:bg-gray-900 rounded-2xl"
                   onClick={handleSearchClick}
                 >
-                  Search
+                  {loading ? ( <Loader width={4} height={4} /> ) : 'Search'}
                 </Button>
               </div>
             </TabsContent>
