@@ -32,7 +32,7 @@ const useStore = create((set, get) => ({
       let updatedTabs = { ...state.selectedTabs };
 
       if (!value && updatedTabs.options.length >= 3) {
-        updatedTabs.options = updatedTabs.options.filter((tab) => tab.name !== "Chat" && tab.name !== "Action");
+        updatedTabs.options = updatedTabs.options.filter((tab) => tab.name !== "Chat");
       } else if (value && updatedTabs.options.length >= 3) {
         updatedTabs.options = mockTabsData;
       }
@@ -100,7 +100,7 @@ const useStore = create((set, get) => ({
   },
   
 
-  setDocumentsList: async (ids = []) => {
+  setDocumentsList: async (ids = [], columnDetailMasterId) => {
     set({ documentsList: null, apiError: null });
 
     if (!ids.length) {
@@ -109,7 +109,7 @@ const useStore = create((set, get) => ({
     }
 
     try {
-      const res = await fetchDocumentsList(ids);
+      const res = await fetchDocumentsList(ids ,columnDetailMasterId);
       set({ documentsList: res.data });
       set({ isCollapsed: false });
     } catch (err) {

@@ -29,7 +29,7 @@ export const fetchUser = () => api.get("/App/User");
 export const fetchDocumentData = (documentId) =>
   api.post(`/DMS/Document/DataVersion/LFRepo/${documentId}`);
 
-export const fetchDocumentsList = (ids = []) => {
+export const fetchDocumentsList = (ids = [],ColumnDetailMasterID ) => {
   const payload = {
     Repository: process.env.REPOSITORY_NAME || "LFRepo",
     Columns: [
@@ -52,7 +52,7 @@ export const fetchDocumentsList = (ids = []) => {
     DeletedFiles: false,
   };
 
-  return api.post("/DMS/Documents/Query/75", payload);
+  return api.post(`/DMS/Documents/Query/${ColumnDetailMasterID}`, payload);
 };
 
 export const fetchTabsList = (id) => {

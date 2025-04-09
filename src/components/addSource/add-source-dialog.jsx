@@ -28,10 +28,13 @@ const AddSourceDialog = () => {
     isAddSourceDialogOpen,
     setAddSourceDialog,
     isCollapsed,
+    user
   } = useStore();
 
   const handleSearchClick = async () => {
-    await setDocumentsList(tags);
+    console.log(tags)
+    const columnDetailMasterId = user?.User.ColumnDetailMaster[0].Id
+    await setDocumentsList(tags,columnDetailMasterId );
     setAddSourceDialog(false);
   };
 
