@@ -59,4 +59,24 @@ export const fetchTabsList = (id) => {
   return api2.get(`/DashboardPage/GetDashboardPageByID?DashboarId=${id}`)
 }
 
+export const uploadFile = async (file) => {
+
+  const base64Data = await fileToBase64(file);
+
+  const payload = {
+    Repository: process.env.REPOSITORY_NAME || "LFRepo",
+    Files: [
+      {
+        File: file.name,
+        LocalFile: "",
+        Filename: "",
+        SecCode: "",
+        Data: base64Data,
+      },
+    ],
+  };
+
+  return api.post(`/DMS/UploadFromDnDFile`, payload);
+};
+
 export default api;

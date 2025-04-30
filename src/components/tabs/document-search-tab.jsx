@@ -39,8 +39,8 @@ const DocumentSearchTab = ({ title, content }) => {
   } = useStore();
 
   useEffect(() => {
-    if (mockData?.Documents) {
-      const mappedDocuments = mockData.Documents.map((doc) => ({
+    if (documentsList?.Documents) {
+      const mappedDocuments = documentsList.Documents.map((doc) => ({
         id: doc.ID,
         name: doc.FileName,
         createdBy: doc.CreatedBy,
@@ -50,7 +50,7 @@ const DocumentSearchTab = ({ title, content }) => {
       }));
       setDocuments(mappedDocuments);
     }
-  }, [mockData]);
+  }, [documentsList]);
 
   const handleCopyName = (name) => {
     navigator.clipboard.writeText(name);
@@ -154,6 +154,7 @@ const DocumentSearchTab = ({ title, content }) => {
         <CardContent className="flex flex-col h-full justify-start p-2 md:px-4 items-center gap-3 md:gap-5">
           <div className="w-full flex gap-2 md:gap-3 px-2 md:px-1">
             <AddSource />
+            <UploadDocument />
           </div>
           <div className="w-full flex flex-col rounded-2xl px-2 md:px-4">
             {documents.length > 0 && (

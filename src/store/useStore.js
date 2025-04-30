@@ -20,19 +20,23 @@ const useStore = create((set, get) => ({
   isCollapsed: false,
   dashboardId: null,
   tabsList: null,
+  tags: [],
 
   // Setters
   setDashboardId: (id) => set({ dashboardId: id }),
   setUser: (user) => set({ user }),
   clearUser: () => set({ user: null }),
   setAddSourceDialog: (value) => set({ isAddSourceDialogOpen: value }),
+  setTags: (values) => set({ tags: values }),
 
   setIsCollapsed: (value) =>
     set((state) => {
       let updatedTabs = { ...state.selectedTabs };
 
       if (!value && updatedTabs.options.length >= 3) {
-        updatedTabs.options = updatedTabs.options.filter((tab) => tab.name !== "Chat");
+        updatedTabs.options = updatedTabs.options.filter(
+          (tab) => tab.name !== "Chat"
+        );
       } else if (value && updatedTabs.options.length >= 3) {
         updatedTabs.options = mockTabsData;
       }
@@ -50,7 +54,8 @@ const useStore = create((set, get) => ({
         ? categoryItems.filter((i) => i.id !== item.id)
         : [...categoryItems, item];
 
-      const shouldCollapse = updatedItems.length === 3 ? true : state.isCollapsed;
+      const shouldCollapse =
+        updatedItems.length === 3 ? true : state.isCollapsed;
 
       return {
         selectedTabs: {
@@ -75,7 +80,7 @@ const useStore = create((set, get) => ({
 
   setSelectedDocumentId: async (id) => {
     const { tabsList } = get();
-  
+
     // Reset the state
     set({
       selectedDocumentId: id,
@@ -87,7 +92,7 @@ const useStore = create((set, get) => ({
           : [],
       },
     });
-  
+
     // Fetch document data
     if (id) {
       try {
@@ -98,7 +103,6 @@ const useStore = create((set, get) => ({
       }
     }
   },
-  
 
   setDocumentsList: async (ids = [], columnDetailMasterId) => {
     set({ documentsList: null, apiError: null });
@@ -109,20 +113,24 @@ const useStore = create((set, get) => ({
     }
 
     try {
-      const res = await fetchDocumentsList(ids ,columnDetailMasterId);
-      set({ documentsList: res.data });
-      set({ isCollapsed: false });
+      const res = await fetchDocumentsList(ids, columnDetailMasterId);
+      set({
+        selectedDocumentId: null,
+        selectedTabs: { options: [] },
+        documentsList: res.data,
+        isCollapsed: false,
+      });
     } catch (err) {
       set({ apiError: err.message });
     }
   },
 
   fetchTabsListForDashboard: async () => {
-    console.log('fetchTabsListForDashboard')
+    console.log("fetchTabsListForDashboard");
     set({ tabsList: null, apiError: null });
-   
+
     const dashboardId = get().dashboardId;
-    console.log(dashboardId, 'dashboardID')
+    console.log(dashboardId, "dashboardID");
 
     // console.log(tabsList, 'inside fetchTabsListForDashboard')
     if (!dashboardId) {
@@ -131,16 +139,16 @@ const useStore = create((set, get) => ({
     }
 
     try {
-      // const res = await fetchTabsList(dashboardId);
-      const res = await getMockTabsResponse()
-      set({ tabsList: res.dashboardPageColumn })
-      console.log(tabsList)
+      const res = await fetchTabsList(dashboardId);
+      // const res = await getMockTabsResponse()
+      set({ tabsList: res.data.dashboardPageColumn });
+      console.log(tabsList);
     } catch (err) {
       set({ apiError: err.message });
     }
-
-
   },
+
+  
 }));
 
 export default useStore;

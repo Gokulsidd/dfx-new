@@ -23,17 +23,19 @@ import { Plus } from "lucide-react";
 import Loader from "../loader";
 
 const AddSourceDialog = () => {
-  const [tags, setTags] = useState([]);
   const [loading, setLoading] =useState(false)
   const {
     setDocumentsList,
     isAddSourceDialogOpen,
     setAddSourceDialog,
     isCollapsed,
-    user
+    user,
+    tags,
+    setTags
   } = useStore();
 
   const handleSearchClick = async () => {
+    console.log(tags)
     setLoading(true)
     try{
       const columnDetailMasterId = user?.User.ColumnDetailMaster[0].Id
@@ -43,7 +45,6 @@ const AddSourceDialog = () => {
       throw new Error(error)
     }finally{
       setLoading(false)
-      setTags([])
     }
   };
 
@@ -94,7 +95,7 @@ const AddSourceDialog = () => {
       </div>
       <DialogContent
         aria-describedby={undefined}
-        className="w-full md:max-w-lg md:h-[380px] flex flex-col gap-1 p-2 md:p-4 bg-gray-50"
+        className="w-full md:max-w-lg md:h-[380px] flex flex-col gap-1 p-2 md:p-4 bg-white rounded-4xl"
       >
         <DialogHeader className="flex items-start h-fit p-2">
           <DialogTitle className="text-muted-foreground font-medium text-lg hidden">
@@ -103,8 +104,8 @@ const AddSourceDialog = () => {
         </DialogHeader>
         <div className="w-full flex justify-center items-start flex-1">
           <Tabs defaultValue="MyDocuments" className="w-full h-full">
-            <TabsList className="w-full h-13 flex justify-center overflow-x-auto overflow-y-hidden bg-gray-50">
-              <TabsTrigger value="input" className="whitespace-nowrap">
+            <TabsList className="w-full h-13 flex justify-center overflow-x-auto overflow-y-hidden bg-white">
+              <TabsTrigger value="input" className="whitespace-nowrap font-semibold ">
                 Document IDs
               </TabsTrigger>
               {/* <TabsTrigger value="selectPack" className="whitespace-nowrap">
@@ -116,7 +117,7 @@ const AddSourceDialog = () => {
               value="input"
               className="flex flex-col justify-between w-full h-full rounded-lg px-4 py-2"
             >
-              <TagInput value={tags} onChange={setTags} />
+              <TagInput />
               <div className="w-full flex gap-3 justify-end items-center">
                 <Button
                 variant={'outline'}

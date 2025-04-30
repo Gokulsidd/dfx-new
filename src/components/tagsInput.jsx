@@ -1,25 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import useStore from "@/store/useStore";
 
 export default function TagInput({
-  placeholder = "Enter ID",
-  value = [],
-  onChange,
+  placeholder = "Enter IDs",
 }) {
-  const [tags, setTags] = useState(value);
   const [inputValue, setInputValue] = useState("");
+  const { tags, setTags } = useStore()
 
-  useEffect(() => {
-    setTags(value);
-  }, [value]);
 
   const addTag = (tag) => {
     const trimmed = tag.trim();
     if (trimmed && !tags.includes(trimmed)) {
       const updatedTags = [...tags, trimmed];
       setTags(updatedTags);
-      onChange?.(updatedTags);
     }
   };
 
@@ -50,14 +45,12 @@ export default function TagInput({
     if (newTags.length) {
       const updatedTags = [...tags, ...newTags];
       setTags(updatedTags);
-      onChange?.(updatedTags);
     }
   };
 
   const removeTag = (index) => {
     const updatedTags = tags.filter((_, i) => i !== index);
     setTags(updatedTags);
-    onChange?.(updatedTags);
   };
 
   const handleKeyDown = (e) => {
@@ -93,7 +86,7 @@ export default function TagInput({
           <button
             type="button"
             onClick={() => removeTag(index)}
-            className="ml-2 text-muted-foreground hover:text-indigo-400"
+            className="ml-2 text-muted-foreground hover:text-gray-400"
           >
             <X className="cursor-pointer" size={14} />
           </button>
@@ -101,7 +94,7 @@ export default function TagInput({
       ))}
 
       <input
-        type="text"
+        type="number"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}

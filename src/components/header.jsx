@@ -17,6 +17,7 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import { getMockTabsResponse, tabsList, mockUserData } from "@/lib/constants";
+import Image from "next/image";
 
 
 
@@ -31,19 +32,19 @@ const Header = () => {
     selectedDocumentId,
     fetchTabsListForDashboard,
     dashboardId,
-    tabsList
+    tabsList,
   } = useStore();
 
   const [loading, setLoading] = useState(true);
 
   const getUser = async () => {
-    setUser(mockUserData); // Simulated user data
-    // fetchUser()
+    // setUser(mockUserData); // Simulated user data
+    fetchUser()
     setLoading(false);
   };
 
   useEffect(() => {
-    const mockTabs = getMockTabsResponse()
+    // const mockTabs = getMockTabsResponse()
     // setTabsList(mockTabs?.dashboardPageColumn)
     fetchTabsListForDashboard()
     getUser();
@@ -69,13 +70,15 @@ const Header = () => {
   };
 
   return (
-    <div className="w-full flex justify-between items-center px-2 pr-4 pt-1 pb-2">
-      <div>
+    <div className="w-full flex justify-between items-center px-3 pr-4 pt-1 pb-2">
+      <div className="flex gap-8 justify-center items-center">
         <h1 className="text-md font-extrabold tracking-wider text-white py-1 px-3 bg-gray-900 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] border border-gray-700 relative overflow-hidden">
           <span className="absolute inset-0 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 opacity-40"></span>
           <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500 to-purple-500 opacity-20 blur-md"></span>
           <span className="relative z-10">DFX</span>
         </h1>
+        {/* <Image src={'/favicon.png'} width={45} height={45} alt="dfx" className="cursor-pointer"  />
+        <h1 className="font-bold text-2xl" >{}</h1> */}
       </div>
       <div className="flex items-center gap-4">
         <DropdownMenu>

@@ -5,13 +5,14 @@ import Image from "next/image";
 
 export const getFileIcon = (extension, fileName) => {
   const iconProps = { width: 0, height: 0, alt: fileName };
+  const basePath = process.env.DFX_BASE_PATH_URL || '/DFX_NEXT_APP'
 
   switch (extension.toLowerCase()) {
     // Documents (Separated)
     case "pdf":
       return (
         <Image
-          src="/pdf.svg"
+          src={`${basePath}/pdf.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -24,7 +25,7 @@ export const getFileIcon = (extension, fileName) => {
     case "dotx":
       return (
         <Image
-          src="/word.svg"
+          src={`${basePath}/word.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -33,7 +34,7 @@ export const getFileIcon = (extension, fileName) => {
     case "rtf":
       return (
         <Image
-          src="/rtf.png"
+          src={`${basePath}/rtf.png`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -54,7 +55,7 @@ export const getFileIcon = (extension, fileName) => {
     case "xltx":
       return (
         <Image
-          src="/csv.svg"
+          src={`${basePath}/csv.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -76,7 +77,7 @@ export const getFileIcon = (extension, fileName) => {
     case "sldx":
       return (
         <Image
-          src="/ppt.svg"
+          src={`${basePath}/ppt.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -87,7 +88,7 @@ export const getFileIcon = (extension, fileName) => {
     case "jpg":
       return (
         <Image
-          src="/jpg.svg"
+          src={`${basePath}/jpg.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -96,7 +97,7 @@ export const getFileIcon = (extension, fileName) => {
     case "jpeg":
       return (
         <Image
-          src="/jpeg.svg"
+          src={`${basePath}/jpeg.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -105,7 +106,7 @@ export const getFileIcon = (extension, fileName) => {
     case "png":
       return (
         <Image
-          src="/png.svg"
+          src={`${basePath}/png.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -114,7 +115,7 @@ export const getFileIcon = (extension, fileName) => {
     case "gif":
       return (
         <Image
-          src="/gif.png"
+          src={`${basePath}/gif.png`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -127,7 +128,7 @@ export const getFileIcon = (extension, fileName) => {
     case "tif":
       return (
         <Image
-          src="/jpg.png"
+          src={`${basePath}/jpg.png`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -142,7 +143,7 @@ export const getFileIcon = (extension, fileName) => {
     case "gz":
       return (
         <Image
-          src="/zip.svg"
+          src={`${basePath}/zip.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -153,7 +154,7 @@ export const getFileIcon = (extension, fileName) => {
     case "txt":
       return (
         <Image
-          src="/txt.svg"
+          src={`${basePath}/txt.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -172,7 +173,7 @@ export const getFileIcon = (extension, fileName) => {
     case "java":
       return (
         <Image
-          src="/coding.png"
+          src={`${basePath}/coding.png`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -183,7 +184,7 @@ export const getFileIcon = (extension, fileName) => {
     default:
       return (
         <Image
-          src="/file.svg"
+          src={`${basePath}/file.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
@@ -8260,37 +8261,31 @@ export const getMockTabsResponse = (selectedDocumentId) => ({
     {
       id: 1004,
       dashboardPageID: 1002,
-      seq: 2,
+      seq: 1,
       name: "Metadata",
-      url: 'http://localhost/DFXDMSLite/dfxwebapp_demo/Email/MailProperty?id=${selectedDocumentId}&application=next',
+      url: `http://localhost/DFXDMSLite/dfxwebapp_demo/Email/MailProperty?id=${selectedDocumentId}&application=next`,
     },
     {
       id: 1005,
       dashboardPageID: 1002,
-      seq: 1,
+      seq: 2,
       name: "Preview",
-      url: 'http://localhost/DFXDMSLite/dfxsync_demo/ApryseDoc/Index?id=${selectedDocumentId}&repository=${REPO_NAME}&readonlyflag=1&newfile=A6vxMjA7.dat&docpreview=1&FileName=VEVTVCAoOCkuZG9jeA==',
+      url: `http://localhost/DFXDMSLite/dfxsync_demo/ApryseDoc/Index?id=${selectedDocumentId}&repository=LFRepo&readonlyflag=1&newfile=A6vxMjA7.dat&docpreview=1&FileName=VEVTVCAoOCkuZG9jeA==`,
     },
     {
       id: 1006,
       dashboardPageID: 1002,
       seq: 3,
       name: "Chat",
-      url: 'http://10.115.14.14/dfxsearch/dfxchat/${selectedDocumentId}',
+      url: `http://10.115.14.14/dfxsearch/dfxchat/${selectedDocumentId}`,
     },
-    // {
-    //   id: 1007,
-    //   dashboardPageID: 1002,
-    //   seq: 4,
-    //   name: "Action",
-    //   url: `http://10.115.14.14/dfxsearch/dfxchat/${selectedDocumentId}`,
-    // },
   ],
   errorMessage: null,
   dataID: 0,
   dataPath: null,
   data: null,
 });
+
 export const successToastObj = {
   style: {
     backgroundColor: "#daf1db",
@@ -8306,4 +8301,19 @@ export const successToastObj = {
     primary: "#7ece82",
     secondary: "#f8f9fa",
   },
+};
+
+export const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const base64String = (reader.result).split(',')[1];
+      resolve(base64String);
+    };
+
+    reader.onerror = error => reject(error);
+
+    reader.readAsDataURL(file); 
+  });
 };

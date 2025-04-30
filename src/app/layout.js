@@ -12,6 +12,9 @@ const openSans = Open_Sans({
 export const metadata = {
   title: "DXF",
   description: "Document workspace",
+  icons: {
+    icon: '/favicon.png', 
+  },
 };
 
 export default function RootLayout({ children }) {

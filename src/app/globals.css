@@ -160,6 +160,20 @@
   display: none;
 }
 
+/* to hide arrows in input type numbers */
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(calc(-100% + 250px)); }
