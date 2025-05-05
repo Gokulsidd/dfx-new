@@ -1,0 +1,7 @@
+{
+    "NEXT_PUBLIC_DFX_API_URL": "http://localhost/DFXDMSLite/dfxapi_demo/",
+    "NEXT_PUBLIC_DFX_API_URL_2": "http://localhost/DFX_NEXT_API/api",
+    "NEXT_PUBLIC_REPOSITORY_NAME": "LGRep",
+    "NEXT_PUBLIC_DFX_BASE_PATH_URL": "/DFX_NEXT_APP"
+}
+  

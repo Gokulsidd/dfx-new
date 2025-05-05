@@ -10,9 +10,9 @@ const ChatDocumentTab = ({tab}) => {
   const iframeRef = useRef(null)
 
   const iframeUrl = useMemo(() => {
-    if (!selectedDocumentId) return tab.url.replace('${selectedDocumentId}', '');
-    return tab.url.replace('${selectedDocumentId}', selectedDocumentId);
-  }, [tab.url, selectedDocumentId]);
+    if (!selectedDocumentId) return tab?.url.replace('${selectedDocumentId}', '');
+    return tab?.url.replace('${selectedDocumentId}', selectedDocumentId);
+  }, [tab?.url, selectedDocumentId]);
   
   const handleClose = () => {
     const chatTab = tabsList?.find((item) => item.name === "Chat");

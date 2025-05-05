@@ -35,20 +35,6 @@ const Header = () => {
     tabsList,
   } = useStore();
 
-  const [loading, setLoading] = useState(true);
-
-  const getUser = async () => {
-    // setUser(mockUserData); // Simulated user data
-    fetchUser()
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    // const mockTabs = getMockTabsResponse()
-    // setTabsList(mockTabs?.dashboardPageColumn)
-    fetchTabsListForDashboard()
-    getUser();
-  }, [dashboardId]);
 
   const handleSelectAll = () => {
     const selectedIds = selectedTabs.options?.map((tab) => tab.id) || [];

@@ -17,10 +17,11 @@ const useStore = create((set, get) => ({
   apiError: null,
   loading: true,
   isAddSourceDialogOpen: false,
-  isCollapsed: false,
+  isCollapsed: true,
   dashboardId: null,
   tabsList: null,
   tags: [],
+  configs: {},
 
   // Setters
   setDashboardId: (id) => set({ dashboardId: id }),
@@ -28,6 +29,7 @@ const useStore = create((set, get) => ({
   clearUser: () => set({ user: null }),
   setAddSourceDialog: (value) => set({ isAddSourceDialogOpen: value }),
   setTags: (values) => set({ tags: values }),
+  setConfigs: (data) => set({ configs: data }),
 
   setIsCollapsed: (value) =>
     set((state) => {
@@ -79,7 +81,7 @@ const useStore = create((set, get) => ({
   },
 
   setSelectedDocumentId: async (id) => {
-    const { tabsList } = get();
+    const { tabsList, selectedTabs } = get();
 
     // Reset the state
     set({
@@ -87,9 +89,9 @@ const useStore = create((set, get) => ({
       documentData: null,
       apiError: null,
       selectedTabs: {
-        options: id
+        options: id && selectedTabs?.options.length === 0 
           ? tabsList?.filter((item) => item.name === "Preview") || []
-          : [],
+          : selectedTabs?.options,
       },
     });
 
@@ -132,16 +134,15 @@ const useStore = create((set, get) => ({
     const dashboardId = get().dashboardId;
     console.log(dashboardId, "dashboardID");
 
-    // console.log(tabsList, 'inside fetchTabsListForDashboard')
     if (!dashboardId) {
       set({ apiError: "Dashboard ID is required" });
       return;
     }
 
     try {
-      const res = await fetchTabsList(dashboardId);
-      // const res = await getMockTabsResponse()
-      set({ tabsList: res.data.dashboardPageColumn });
+      // const res = await fetchTabsList(dashboardId);
+      const res = getMockTabsResponse()
+      set({ tabsList: res.dashboardPageColumn });
       console.log(tabsList);
     } catch (err) {
       set({ apiError: err.message });

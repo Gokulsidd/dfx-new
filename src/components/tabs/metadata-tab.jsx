@@ -9,9 +9,9 @@ const MetaDataTab = ({tab}) => {
   const { selectedDocumentId, toggleItem, tabsList } = useStore();
 
   const iframeUrl = useMemo(() => {
-      if (!selectedDocumentId) return tab.url.replace('${selectedDocumentId}', '');
-      return tab.url.replace('${selectedDocumentId}', selectedDocumentId);
-    }, [tab.url, selectedDocumentId]);
+      if (!selectedDocumentId) return tab?.url.replace('${selectedDocumentId}', '');
+      return tab?.url.replace('${selectedDocumentId}', selectedDocumentId);
+    }, [tab?.url, selectedDocumentId]);
 
   const handleClose = () => {
     const metadataTab = tabsList?.find((item) => item.name === "Metadata");
@@ -31,7 +31,7 @@ const MetaDataTab = ({tab}) => {
                 <span className="text-muted-foreground">
                   <SquareCode size={16} />
                 </span>
-                <p className="text-muted-foreground text-sm font-medium">{tab.name}</p>
+                <p className="text-muted-foreground text-sm font-medium">{tab?.name}</p>
               </div>
             <button
               className="text-muted-foreground cursor-pointer hover:bg-gray-200 w-8 h-8 flex items-center justify-center rounded-full"

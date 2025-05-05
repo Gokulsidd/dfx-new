@@ -21,7 +21,7 @@ const PreviewTab = ({ tab }) => {
     }
 
     return url;
-  }, [tab.url, selectedDocumentId]);
+  }, [tab?.url, selectedDocumentId]);
 
   const handleClose = () => {
     const previewTab = tabsList?.find((item) => item.name === "Preview");
@@ -57,7 +57,7 @@ const PreviewTab = ({ tab }) => {
               <span className="text-muted-foreground">
                 <FileSearch size={16} />
               </span>
-              <p className="text-muted-foreground text-sm font-medium">{tab.name}</p>
+              <p className="text-muted-foreground text-sm font-medium">{tab?.name}</p>
             </div>
             <div
               className="text-muted-foreground cursor-pointer hover:bg-gray-200 w-8 h-8 flex items-center justify-center rounded-full"

@@ -36,11 +36,12 @@ const DocumentSearchTab = ({ title, content }) => {
     documentsList,
     isCollapsed,
     setIsCollapsed,
+    configs,
   } = useStore();
 
   useEffect(() => {
-    if (documentsList?.Documents) {
-      const mappedDocuments = documentsList.Documents.map((doc) => ({
+    if (mockData?.Documents) {
+      const mappedDocuments = mockData.Documents.map((doc) => ({
         id: doc.ID,
         name: doc.FileName,
         createdBy: doc.CreatedBy,
@@ -50,24 +51,30 @@ const DocumentSearchTab = ({ title, content }) => {
       }));
       setDocuments(mappedDocuments);
     }
-  }, [documentsList]);
+  }, [mockData]);
 
-  const handleCopyName = (name) => {
-    navigator.clipboard.writeText(name);
-    toast.success("copied to clipboard !", successToastObj)
+  const handleCopyName = async (name) => {
+    try {
+      await navigator.clipboard.writeText(name); 
+      toast.success("Copied to clipboard!", successToastObj);
+    } catch (err) {
+      toast.error("Failed to copy name.");
+    }
   };
 
   const handleRemoveDocument = (id) => {
-    setDocuments(prevDocuments => prevDocuments.filter(doc => doc.id !== id));
+    setDocuments((prevDocuments) =>
+      prevDocuments.filter((doc) => doc.id !== id)
+    );
     toast.success("Document removed successfully !", successToastObj);
-  }
+  };
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
 
   const handleSelectDocument = (item) => {
-    console.log(item.id, selectedDocumentId)
+    console.log(item.id, selectedDocumentId);
     if (selectedDocumentId === item.id) {
       setSelectedDocumentId(null);
       return;
@@ -75,11 +82,12 @@ const DocumentSearchTab = ({ title, content }) => {
     console.log(item);
     setSelectedDocumentId(item.id);
   };
-  console.log(selectedDocumentId)
+  console.log(selectedDocumentId);
 
   // Get selected document name for collapsed view
   const selectedDoc = documents?.find((doc) => doc.id === selectedDocumentId);
 
+  console.log(configs?.NEXT_PUBLIC_DFX_API_URL, "from doc-search");
   return (
     <Card
       className={`text-slate-800 bg-white w-full flex flex-col gap-2 rounded-2xl shadow-lg transition-all ease-in-out duration-300 ${
@@ -87,6 +95,7 @@ const DocumentSearchTab = ({ title, content }) => {
           ? "h-[50px] md:h-full w-full md:min-w-[60px] md:w-[60px]"
           : "min-w-[300px] md:min-w-[430px] md:w-[40%] h-full"
       }`}
+    onMouseLeave={isCollapsed ? null : toggleCollapse}
     >
       <CardHeader>
         <CardTitle className="border-b border-slate-300 p-1">
@@ -135,26 +144,63 @@ const DocumentSearchTab = ({ title, content }) => {
       {isCollapsed ? (
         <CardContent className="md:flex flex-col justify-center items-center gap-3">
           <AddSource />
-          {selectedDocumentId && selectedDoc && (
+          <div
+            key={selectedDocumentId}
+            className={`${
+              selectedDocumentId && selectedDoc
+                ? "flex justify-center items-center bg-white border border-gray-200 shadow-xs rounded-md animate-pop-in"
+                : "hidden"
+            }`}
+          >
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <div className="cursor-pointer flex flex-col p-2 items-center justify-center text-sm text-slate-100 rounded-md hover:bg-gray-100">
-                    {getFileIcon(selectedDoc.extension, selectedDoc.name)}
+                  <div className="cursor-pointer flex flex-col items-center justify-center text-sm text-gray-700 hover:bg-gray-50 rounded-md p-2 transition-colors">
+                    {getFileIcon(selectedDoc?.extension, selectedDoc?.name)}
                   </div>
                 </TooltipTrigger>
                 <TooltipContent side="right">
-                  {selectedDoc.name} (ID: {selectedDocumentId})
+                  {selectedDoc?.name} (ID: {selectedDoc?.id})
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-          )}
+          </div>
+          <div className="w-[15px] bg-gray-300 h-[1px] my-2"> </div>
+          <div>
+            {documents.length > 0 ? (
+              <div className="md:flex flex-col justify-center items-center gap-2">
+                {documents.slice(0, 12).map((doc) =>
+                  selectedDocumentId != doc.id ? (
+                    <div key={doc.id} onClick={() => handleSelectDocument(doc)}>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <div className="cursor-pointer flex flex-col p-2 items-center justify-center text-sm text-slate-100 rounded-md hover:bg-gray-100">
+                              {getFileIcon(doc.extension, doc.name)}
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent side="right">
+                            {doc.name} (ID: {doc.id})
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  ) : null
+                )}
+
+                {documents.length > 12 && (
+                  <div className="text-slate-400 text-sm mt-1 cursor-pointer hover:bg-gray-100 rounded-md" onMouseEnter={toggleCollapse}
+                 >...</div>
+                )}
+              </div>
+            ) : null}
+          </div>
         </CardContent>
       ) : (
         <CardContent className="flex flex-col h-full justify-start p-2 md:px-4 items-center gap-3 md:gap-5">
           <div className="w-full flex gap-2 md:gap-3 px-2 md:px-1">
             <AddSource />
-            <UploadDocument />
+            {/* <UploadDocument /> */}
           </div>
           <div className="w-full flex flex-col rounded-2xl px-2 md:px-4">
             {documents.length > 0 && (
@@ -162,7 +208,11 @@ const DocumentSearchTab = ({ title, content }) => {
                 Select a document
               </div>
             )}
-            <div className={`flex flex-col h-[300px] md:h-[470px] overflow-y-hidden ${documents.length > 0 && 'hover:overflow-y-scroll'} rounded-2xl rounded-t-none py-1 space-y-1 bg-white relative`}>
+            <div
+              className={`flex flex-col h-[300px] md:h-[470px] overflow-y-hidden ${
+                documents.length > 0 && "hover:overflow-y-scroll"
+              } rounded-2xl rounded-t-none py-1 space-y-1 bg-white relative`}
+            >
               {documents.length > 0 ? (
                 documents.map((item) => (
                   <div
@@ -224,8 +274,8 @@ const DocumentSearchTab = ({ title, content }) => {
                               <DropdownMenuItem
                                 className="text-red-600/70 hover:bg-red-100"
                                 onClick={(event) => {
-                                  event.stopPropagation()
-                                  handleRemoveDocument(item.id)
+                                  event.stopPropagation();
+                                  handleRemoveDocument(item.id);
                                 }} // Prevent propagation here too
                               >
                                 Remove Document

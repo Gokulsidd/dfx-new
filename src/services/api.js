@@ -1,37 +1,61 @@
 // lib/api.js
 import axios from "axios";
+import useStore from "@/store/useStore";
 
-// Base config
-const BASE_URL = process.env.DFX_PUBLIC_API_URL || "http://localhost/DFXDMSLite/dfxapi_demo";
-const BASE_URL_2 = process.env.DFX_NEXT_PUBLIC_API_URL ||  "http://localhost/DFX_NEXT_API/api"
+// Helper to create axios instance with dynamic config
+const getApiInstance = () => {
+  const { configs } = useStore.getState();
 
-// Create axios instance
-const api = axios.create({
-  baseURL: BASE_URL,
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+  console.log(configs, 'api instance 1')
+  
+  return axios.create({
+    baseURL: configs?.NEXT_PUBLIC_DFX_API_URL || "",
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
 
-const api2 = axios.create({
-  baseURL: BASE_URL_2,
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+const getApi2Instance = () => {
+  const { configs } = useStore.getState();
+  
+  console.log(configs?.NEXT_PUBLIC_DFX_API_URL_2)
+  return axios.create({
+    baseURL: configs?.NEXT_PUBLIC_DFX_API_URL_2 || "",
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
 
-// API endpoints
+const getRepoName = () => {
+  const { configs } = useStore.getState();
+  console.log( configs?.NEXT_PUBLIC_REPOSITORY_NAME)
+  return configs?.NEXT_PUBLIC_REPOSITORY_NAME || "";
+};
 
-export const fetchUser = () => api.get("/App/User");
+// API functions
 
-export const fetchDocumentData = (documentId) =>
-  api.post(`/DMS/Document/DataVersion/LFRepo/${documentId}`);
+export const fetchUser = () => {
+  const api = getApiInstance();
+  console.log('this is get user from api instance', api)
+  return api.get("App/User");
+};
 
-export const fetchDocumentsList = (ids = [],ColumnDetailMasterID ) => {
+export const fetchDocumentData = (documentId) => {
+  const api = getApiInstance();
+  const REPO_NAME = getRepoName();
+  return api.post(`/DMS/Document/DataVersion/${REPO_NAME}/${documentId}`);
+};
+
+export const fetchDocumentsList = (ids = [], ColumnDetailMasterID) => {
+  const api = getApiInstance();
+  const REPO_NAME = getRepoName();
+
   const payload = {
-    Repository: process.env.REPOSITORY_NAME || "LFRepo",
+    Repository: REPO_NAME,
     Columns: [
       [
         {
@@ -56,15 +80,25 @@ export const fetchDocumentsList = (ids = [],ColumnDetailMasterID ) => {
 };
 
 export const fetchTabsList = (id) => {
-  return api2.get(`/DashboardPage/GetDashboardPageByID?DashboarId=${id}`)
-}
+  const api2 = getApi2Instance();
+  return api2.get(`/DashboardPage/GetDashboardPageByID?DashboarId=${id}`);
+};
+
+const fileToBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result.split(",")[1]);
+    reader.onerror = (error) => reject(error);
+  });
 
 export const uploadFile = async (file) => {
-
+  const api = getApiInstance();
+  const REPO_NAME = getRepoName();
   const base64Data = await fileToBase64(file);
 
   const payload = {
-    Repository: process.env.REPOSITORY_NAME || "LFRepo",
+    Repository: REPO_NAME,
     Files: [
       {
         File: file.name,
@@ -78,5 +112,3 @@ export const uploadFile = async (file) => {
 
   return api.post(`/DMS/UploadFromDnDFile`, payload);
 };
-
-export default api;
