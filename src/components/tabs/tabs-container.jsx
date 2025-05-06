@@ -12,15 +12,16 @@ const ChatDocumentTab = lazy(() => import("./chat-document-tab"));
 const MetaDataTab = lazy(() => import("./metadata-tab"));
 const PreviewTab = lazy(() => import("./preview-tab"));
 
+
 const TabsContainer = () => {
   const { selectedTabs, tabsList, selectedDocumentId } = useStore();
 
   // Sort the selected tabs by sequence
   const orderedTabs = useMemo(() => {
-    return [...selectedTabs.options].sort((a, b) => a.seq - b.seq);
-  }, [selectedTabs.options]);
+    return tabsList?.sort((a, b) => a.seq - b.seq)
+  }, [tabsList]);
 
-
+  console.log(selectedTabs.options, tabsList, 'this is the end ')
 
   const renderTabComponent = (tab) => {
     switch (tab.name) {
@@ -56,18 +57,9 @@ const TabsContainer = () => {
     <div className="h-full">
       <main className="w-full h-full flex flex-col md:flex-row justify-start items-center gap-3 px-2">
         <DocumentSearchTab />
-
         {selectedTabs.options?.length === 0 && <NoDocumentSelected />}
-
-        <Suspense
-          fallback={
-            <div className="w-full h-full flex gap-3">
-              <Skeleton className="w-full h-full bg-gray-200/70 rounded-2xl" />
-            </div>
-          }
-        >
-          {orderedTabs.map((tab) => renderTabComponent(tab))}
-        </Suspense>
+        {console.log(orderedTabs, 'this is ordered tabs')}
+        {orderedTabs?.map((tab) => renderTabComponent(tab))}
       </main>
     </div>
   );

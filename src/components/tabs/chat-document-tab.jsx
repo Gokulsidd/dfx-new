@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import useStore from "@/store/useStore";
 
 const ChatDocumentTab = ({tab}) => {
-  const { selectedDocumentId, toggleItem, tabsList } = useStore();
+  const { selectedDocumentId, toggleItem, tabsList, selectedTabs } = useStore();
   const iframeRef = useRef(null)
 
   const iframeUrl = useMemo(() => {
@@ -23,7 +23,8 @@ const ChatDocumentTab = ({tab}) => {
 
   
   return (
-    <Card
+    <div className={`${selectedTabs.options?.some((t) => t.name === "Chat") ? "flex" : "hidden"} flex-col text-slate-800 h-full   rounded-2xl shadow-sm transition-all duration-300 w-full`}>
+      <Card
     className={` text-slate-800 h-full flex flex-col rounded-2xl shadow-sm w-full `}
     >
       <CardHeader>
@@ -44,6 +45,8 @@ const ChatDocumentTab = ({tab}) => {
         <iframe src={iframeUrl} className="rounded-b-2xl w-full h-full border-none min-h-[500px]" title="chat-with-document" ref={iframeRef} ></iframe>
       </CardContent>
     </Card>
+    </div>
+    
   );
 };
 

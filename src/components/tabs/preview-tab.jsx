@@ -6,22 +6,22 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import useStore from "@/store/useStore";
 
 const PreviewTab = ({ tab }) => {
-  const { selectedDocumentId, toggleItem, tabsList } = useStore();
-  const iframeContainerRef = useRef(null);
-  const [iframeKey, setIframeKey] = useState(Date.now()); // force iframe reload on resize
+  const { selectedDocumentId, toggleItem, tabsList, selectedTabs } = useStore();
+  // const iframeContainerRef = useRef(null);
+  // const [iframeKey, setIframeKey] = useState(Date.now()); // force iframe reload on resize
 
-  const iframeUrl = useMemo(() => {
-    if (!selectedDocumentId) return "";
-    let url = tab.url
-      .replace("${selectedDocumentId}", selectedDocumentId)
-      .replace("${REPO_NAME}", process.env.NEXT_PUBLIC_REPOSITORY_NAME || "LFRepo");
+  // const iframeUrl = useMemo(() => {
+  //   if (!selectedDocumentId) return "";
+  //   let url = tab.url
+  //     .replace("${selectedDocumentId}", selectedDocumentId)
+  //     .replace("${REPO_NAME}", process.env.NEXT_PUBLIC_REPOSITORY_NAME || "LFRepo");
 
-    if (url.includes("newfile=")) {
-      url = url.replace("A6vxMjA7.dat", `${selectedDocumentId}.dat`);
-    }
+  //   if (url.includes("newfile=")) {
+  //     url = url.replace("A6vxMjA7.dat", `${selectedDocumentId}.dat`);
+  //   }
 
-    return url;
-  }, [tab?.url, selectedDocumentId]);
+  //   return url;
+  // }, [tab?.url, selectedDocumentId]);
 
   const handleClose = () => {
     const previewTab = tabsList?.find((item) => item.name === "Preview");
@@ -31,25 +31,26 @@ const PreviewTab = ({ tab }) => {
   };
 
   // 🔁 Resize observer to trigger iframe reload
-  useEffect(() => {
-    const observer = new ResizeObserver(() => {
-      // Reset iframe key to trigger re-render
-      setIframeKey(Date.now());
-    });
+  // useEffect(() => {
+  //   const observer = new ResizeObserver(() => {
+  //     // Reset iframe key to trigger re-render
+  //     setIframeKey(Date.now());
+  //   });
 
-    if (iframeContainerRef.current) {
-      observer.observe(iframeContainerRef.current);
-    }
+  //   if (iframeContainerRef.current) {
+  //     observer.observe(iframeContainerRef.current);
+  //   }
 
-    return () => {
-      if (iframeContainerRef.current) {
-        observer.unobserve(iframeContainerRef.current);
-      }
-    };
-  }, []);
+  //   return () => {
+  //     if (iframeContainerRef.current) {
+  //       observer.unobserve(iframeContainerRef.current);
+  //     }
+  //   };
+  // }, []);
 
   return (
-    <Card className="text-slate-800 h-full flex flex-col rounded-2xl shadow-sm w-full">
+    <div className={`${selectedTabs.options?.some((t) => t.name === "Preview") ? "flex" : "hidden"} flex-col text-slate-800 h-full   rounded-2xl shadow-sm transition-all duration-300 w-full`}>
+       <Card className="text-slate-800 h-full flex flex-col rounded-2xl shadow-sm w-full">
       <CardHeader>
         <CardTitle className="border-b border-slate-300 p-1">
           <div className="flex justify-between items-center">
@@ -68,18 +69,22 @@ const PreviewTab = ({ tab }) => {
           </div>
         </CardTitle>
       </CardHeader>
-
-      <CardContent className="w-full h-full flex-1 p-0" ref={iframeContainerRef}>
-        {iframeUrl && (
+      
+      {/* ref={iframeContainerRef} */}
+      <CardContent className="w-full h-full flex-1 p-0" >
+        {/* {iframeUrl && ( */}
           <iframe
-            key={iframeKey} // 👈 this causes re-render
-            src={iframeUrl}
+            // key={iframeKey} // 👈 this causes re-render
+            // src={iframeUrl}
+            src={tab?.url}
             className="w-full h-full border-none min-h-[500px] rounded-b-2xl"
             title="Preview"
           ></iframe>
-        )}
+        {/* )} */}
       </CardContent>
     </Card>
+    </div>
+   
   );
 };
 

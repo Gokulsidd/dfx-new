@@ -29,9 +29,9 @@ const NoDocumentSelected = () => {
             </p>
           </div>
 
-          {/* <div className="w-full p-8">
+          <div className="w-full p-8">
             <FileDropper />
-          </div> */}
+          </div>
         </CardContent>
       </Card>
     </motion.div>

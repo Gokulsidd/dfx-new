@@ -7,15 +7,16 @@ export const getFileIcon = (extension, fileName) => {
   const iconProps = { width: 0, height: 0, alt: fileName };
   const basePath = process.env.DFX_BASE_PATH_URL || '/DFX_NEXT_APP'
 
-  switch (extension.toLowerCase()) {
+  switch (extension?.toLowerCase()) {
     // Documents (Separated)
     case "pdf":
       return (
         <Image
-          src={`${basePath}/pdf.svg`}
+          src={`/pdf.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="pdf"
         />
       );
     case "doc":
@@ -25,19 +26,21 @@ export const getFileIcon = (extension, fileName) => {
     case "dotx":
       return (
         <Image
-          src={`${basePath}/word.svg`}
+          src={`/word.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="doc"
         />
       );
     case "rtf":
       return (
         <Image
-          src={`${basePath}/rtf.png`}
+          src={`/rtf.png`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="rtf"
         />
       );
 
@@ -55,10 +58,11 @@ export const getFileIcon = (extension, fileName) => {
     case "xltx":
       return (
         <Image
-          src={`${basePath}/csv.svg`}
+          src={`/csv.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="csv"
         />
       );
 
@@ -77,10 +81,11 @@ export const getFileIcon = (extension, fileName) => {
     case "sldx":
       return (
         <Image
-          src={`${basePath}/ppt.svg`}
+          src={`/ppt.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="ppt"
         />
       );
 
@@ -88,37 +93,41 @@ export const getFileIcon = (extension, fileName) => {
     case "jpg":
       return (
         <Image
-          src={`${basePath}/jpg.svg`}
+          src={`/jpg.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="jpg"
         />
       );
     case "jpeg":
       return (
         <Image
-          src={`${basePath}/jpeg.svg`}
+          src={`/jpeg.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="jpeg"
         />
       );
     case "png":
       return (
         <Image
-          src={`${basePath}/png.svg`}
+          src={`/png.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="png"
         />
       );
     case "gif":
       return (
         <Image
-          src={`${basePath}/gif.png`}
+          src={`/gif.png`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="gif"
         />
       );
     case "svg":
@@ -128,10 +137,11 @@ export const getFileIcon = (extension, fileName) => {
     case "tif":
       return (
         <Image
-          src={`${basePath}/jpg.png`}
+          src={`/jpg.png`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="svg"
         />
       );
 
@@ -143,10 +153,11 @@ export const getFileIcon = (extension, fileName) => {
     case "gz":
       return (
         <Image
-          src={`${basePath}/zip.svg`}
+          src={`/zip.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="zip"
         />
       );
 
@@ -154,10 +165,11 @@ export const getFileIcon = (extension, fileName) => {
     case "txt":
       return (
         <Image
-          src={`${basePath}/txt.svg`}
+          src={`/txt.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="txt"
         />
       );
     case "json":
@@ -173,10 +185,11 @@ export const getFileIcon = (extension, fileName) => {
     case "java":
       return (
         <Image
-          src={`${basePath}/coding.png`}
+          src={`/coding.png`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="code"
         />
       );
 
@@ -184,10 +197,11 @@ export const getFileIcon = (extension, fileName) => {
     default:
       return (
         <Image
-          src={`${basePath}/file.svg`}
+          src={`/file.svg`}
           style={{ width: "20px", height: "auto" }}
           {...iconProps}
           unoptimized
+          alt="file"
         />
       );
   }
