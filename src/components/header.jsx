@@ -10,6 +10,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import { mockData } from "@/lib/constants";
 
 const Header = () => {
   const {
@@ -18,6 +19,7 @@ const Header = () => {
     user,
     selectedDocumentId,
     tabsList,
+    documentsList
   } = useStore();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -54,6 +56,9 @@ const Header = () => {
     }
   };
 
+  console.log(mockData?.Documents, 'helokokoo')
+  const selectedDoc = mockData?.Documents.filter((doc) => doc.ID === selectedDocumentId )
+
   return (
     <div className="w-full flex justify-between items-center px-3 pr-4 pt-1 pb-2">
       <div className="flex gap-8 justify-center items-center">
@@ -62,6 +67,8 @@ const Header = () => {
           <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500 to-purple-500 opacity-20 blur-md"></span>
           <span className="relative z-10">DFX</span>
         </h1>
+        {selectedDoc && <p>{selectedDoc[0]?.FileName} <span>{selectedDoc[0]?.ID}</span> </p>}
+        
       </div>
       <div className="flex items-center gap-4">
         {/* Custom Dropdown */}

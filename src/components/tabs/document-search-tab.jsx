@@ -95,7 +95,7 @@ const DocumentSearchTab = ({ title, content }) => {
           ? "h-[50px] md:h-full w-full md:min-w-[60px] md:w-[60px]"
           : "min-w-[300px] md:min-w-[430px] md:w-[40%] h-full"
       }`}
-    onMouseLeave={isCollapsed ? null : toggleCollapse}
+    // onMouseLeave={isCollapsed ? null : toggleCollapse}
     >
       <CardHeader>
         <CardTitle className="border-b border-slate-300 p-1">
@@ -200,7 +200,7 @@ const DocumentSearchTab = ({ title, content }) => {
         <CardContent className="flex flex-col h-full justify-start p-2 md:px-4 items-center gap-3 md:gap-5">
           <div className="w-full flex gap-2 md:gap-3 px-2 md:px-1">
             <AddSource />
-            {/* <UploadDocument /> */}
+            <UploadDocument />
           </div>
           <div className="w-full flex flex-col rounded-2xl px-2 md:px-4">
             {documents.length > 0 && (

@@ -1,28 +1,35 @@
 import { Delete, FileUp, Trash2, Upload } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { Button } from "./ui/button";
+import { getFileIcon } from "@/lib/constants";
+import { uploadFiles } from "@/services/api";
 
 const FileDropper = () => {
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const fileInputRef = useRef();
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile) setFile(droppedFile);
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    if (droppedFiles.length) {
+      setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
+    }
   };
 
-  const handleRemoveFile = () => {
-    setFile(null)
-  }
+  const handleRemoveFile = (fileName) => {
+    setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
+  };
 
   const handleUploadFile = async () => {
-    // api here
-  }
+    const res = await uploadFiles(files)
+    console.log(res, 'this is upload api response')
+  };
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) setFile(selectedFile);
+    const selectedFiles = Array.from(e.target.files);
+    if (selectedFiles.length) {
+      setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+    }
   };
 
   const handleDragOver = (e) => {
@@ -41,37 +48,48 @@ const FileDropper = () => {
         onClick={triggerFileSelect}
         className="w-full h-full flex flex-col items-center justify-center gap-8 bg-white border-2 border-dashed border-gray-300 rounded-2xl transition-shadow duration-200 hover:bg-gray-100/50 cursor-pointer"
       >
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          className="hidden"
-        />
+        <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple className="hidden" />
         <div className="flex flex-col items-center justify-center">
-          <p className="text-gray-600 text-sm">Drag & drop a file here</p>
+          <p className="text-gray-600 text-sm">Drag & drop files here</p>
           <p className="text-gray-500 text-xs mt-1">or click to browse</p>
         </div>
       </div>
 
-      {file && (
-        <div className="flex gap-3 w-full items-center justify-center">
-          <div className="text-center p-8 py-2 bg-gray-100/50 shadow-md rounded-xl text-gray-700 font-medium">
-            {file.name}
+      {files.length > 0 && (
+        <div className="flex flex-col items-start justify-center gap-3 ">
+          <div className="bg-gray-100/50 rounded-xl w-[700px] p-4 h-[200px]  overflow-y-hidden hover:overflow-y-scroll flex flex-col gap-2">
+            {files.map((file) => {
+              const extension = file.name.split(".").pop();
+              return (
+                <div key={file.name} className="flex w-[650px] justify-between px-4 py-1 gap-2 bg-white rounded-md">
+                  <div className="flex items-center gap-3 text-muted-foreground font-medium whitespace-nowrap p-4 py-2">
+                    {getFileIcon(extension, file.name)}
+                    {file.name}
+                  </div>
+                  <Button
+                    variant={"ghost"}
+                    className={"text-gray-600/70 hover:bg-red-100 hover:text-red-600/70 h-full group"}
+                    onClick={() => handleRemoveFile(file.name)}
+                  >
+                    <Trash2 size={20} className="text-red-600/70 group-hover:text-red-600/70" />
+                  </Button>
+                </div>
+              );
+            })}
           </div>
-          <Button
-            variant={"ghost"}
-            className={"text-blue-600/70 hover:bg-blue-100 h-full"}
-            onClick={handleUploadFile}
-          >
-            <Upload className="text-blue-600/70" />
-          </Button>
-          <Button
-            variant={"ghost"}
-            className={"text-red-600/70 hover:bg-red-100 h-full"}
-            onClick={handleRemoveFile}
-          >
-            <Trash2 className="text-red-600/70" />
-          </Button>
+
+          <div className="w-full">
+            <Button
+              variant={"primary"}
+              className={
+                "hover:text-green-600/70  w-[120px] border-none rounded-xl text-muted-foreground hover:bg-green-100 float-right"
+              }
+              onClick={handleUploadFile}
+            >
+              <FileUp size={20} className="text-green-600/70" />
+              Upload
+            </Button>
+          </div>
         </div>
       )}
     </div>

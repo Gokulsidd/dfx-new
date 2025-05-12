@@ -31,18 +31,7 @@ const UploadDocumentDialog = () => {
           <DialogTitle className={"text-muted-foreground font-medium text-lg"}>
           </DialogTitle>
         </DialogHeader>
-        <div className="w-full h-full flex flex-col justify-center items-center gap-6 p-8 ">
-          <div className="p-4 bg-gray-50 rounded-full shadow-inner">
-            <FileSearch size={60} className="text-gray-300" />
-          </div>
-
-          <div className="text-center">
-            <p className="text-gray-500 text-sm max-w-md mx-auto">
-              Upload or drag & drop a document to see its contents, metadata, and
-              more.
-            </p>
-          </div>
-
+        <div className="w-full h-full flex flex-col justify-start items-center ">
           <div className="w-full p-8">
             <FileDropper />
           </div>

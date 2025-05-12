@@ -6,6 +6,7 @@ import {
   fetchDocumentData,
   fetchDocumentsList,
   fetchTabsList,
+  uploadFiles,
 } from "@/services/api";
 
 const useStore = create((set, get) => ({
@@ -89,10 +90,14 @@ const useStore = create((set, get) => ({
       documentData: null,
       apiError: null,
       selectedTabs: {
-        options: id && selectedTabs?.options.length === 0 
-          ? tabsList?.filter((item) => item.name === "Preview") || []
-          : selectedTabs?.options,
+        options:
+          id && selectedTabs?.options.length === 0
+            ? tabsList?.filter(
+                (item) => item.name === "Preview" || item.name === "Chat"
+              ) || []
+            : selectedTabs?.options,
       },
+      isCollapsed: true,
     });
 
     // Fetch document data
@@ -120,7 +125,7 @@ const useStore = create((set, get) => ({
         selectedDocumentId: null,
         selectedTabs: { options: [] },
         documentsList: res.data,
-        isCollapsed: false,
+        isCollapsed: true,
       });
     } catch (err) {
       set({ apiError: err.message });
@@ -141,7 +146,7 @@ const useStore = create((set, get) => ({
 
     try {
       // const res = await fetchTabsList(dashboardId);
-      const res = getMockTabsResponse()
+      const res = getMockTabsResponse();
       set({ tabsList: res.dashboardPageColumn });
       console.log(tabsList);
     } catch (err) {
@@ -149,7 +154,18 @@ const useStore = create((set, get) => ({
     }
   },
 
-  
+  uploadFilesFromDnD: async (files) => {
+    set({ apiError: null });
+
+    if(files){
+      try {
+      const res = uploadFiles(files);
+      console.log(res);
+    } catch (err) {
+      set({ apiError: err.message });
+    }
+    }
+  },
 }));
 
 export default useStore;

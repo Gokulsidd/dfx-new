@@ -92,23 +92,38 @@ const fileToBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-export const uploadFile = async (file) => {
+export const uploadFiles = async (files) => {
   const api = getApiInstance();
   const REPO_NAME = getRepoName();
-  const base64Data = await fileToBase64(file);
 
-  const payload = {
-    Repository: REPO_NAME,
-    Files: [
-      {
-        File: file.name,
-        LocalFile: "",
-        Filename: "",
-        SecCode: "",
-        Data: base64Data,
-      },
-    ],
-  };
+  const filePromises = files.map((file) => fileToBase64(file));
 
-  return api.post(`/DMS/UploadFromDnDFile`, payload);
+  try {
+    const base64Files = await Promise.all(filePromises);
+
+    // Dynamically create the payload for all files
+    const fileData = base64Files.map((base64Data, index) => ({
+      File: files[index].name,
+      LocalFile: "",
+      Filename: "",
+      SecCode: "",
+      Data: base64Data,
+      VolumeID: -1,
+      IsNew: false
+    }));
+
+    const payload = {
+      Repository: REPO_NAME,
+      Files: fileData,
+    };
+
+    console.log(payload, 'this is payload')
+
+    const response = await api.post(`/DMS/UploadFromDnDFile`, payload);
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading files:", error);
+    throw error;  // Re-throw error to propagate it to the caller
+  }
 };
+
