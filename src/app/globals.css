@@ -193,6 +193,10 @@ input[type=number] {
   }
 }
 
+.custom-shadow {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
 .animate-pop-in {
   animation: pop 0.3s ease-out;
 }

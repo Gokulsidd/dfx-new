@@ -17,7 +17,13 @@ import { getFileIcon, mockData, successToastObj } from "@/lib/constants";
 import UploadDocument from "../uploadDocuments/upload-document";
 import AddSource from "../addSource/add-source";
 import { Checkbox } from "../ui/checkbox";
-import { EllipsisVertical, FileText, PanelLeft, Plus } from "lucide-react";
+import {
+  EllipsisVertical,
+  FileText,
+  PanelLeft,
+  Plus,
+  Upload,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,7 +61,7 @@ const DocumentSearchTab = ({ title, content }) => {
 
   const handleCopyName = async (name) => {
     try {
-      await navigator.clipboard.writeText(name); 
+      await navigator.clipboard.writeText(name);
       toast.success("Copied to clipboard!", successToastObj);
     } catch (err) {
       toast.error("Failed to copy name.");
@@ -74,20 +80,16 @@ const DocumentSearchTab = ({ title, content }) => {
   };
 
   const handleSelectDocument = (item) => {
-    console.log(item.id, selectedDocumentId);
     if (selectedDocumentId === item.id) {
       setSelectedDocumentId(null);
       return;
     }
-    console.log(item);
     setSelectedDocumentId(item.id);
   };
-  console.log(selectedDocumentId);
 
   // Get selected document name for collapsed view
   const selectedDoc = documents?.find((doc) => doc.id === selectedDocumentId);
 
-  console.log(configs?.NEXT_PUBLIC_DFX_API_URL, "from doc-search");
   return (
     <Card
       className={`text-slate-800 bg-white w-full flex flex-col gap-2 rounded-2xl shadow-lg transition-all ease-in-out duration-300 ${
@@ -95,7 +97,7 @@ const DocumentSearchTab = ({ title, content }) => {
           ? "h-[50px] md:h-full w-full md:min-w-[60px] md:w-[60px]"
           : "min-w-[300px] md:min-w-[430px] md:w-[40%] h-full"
       }`}
-    // onMouseLeave={isCollapsed ? null : toggleCollapse}
+      // onMouseLeave={isCollapsed ? null : toggleCollapse}
     >
       <CardHeader>
         <CardTitle className="border-b border-slate-300 p-1">
@@ -143,27 +145,52 @@ const DocumentSearchTab = ({ title, content }) => {
       </CardHeader>
       {isCollapsed ? (
         <CardContent className="md:flex flex-col justify-center items-center gap-3">
-          <AddSource />
+          {/* Dropdown for AddSource and UploadDocument */}
+          <div className="relative group">
+            <Button
+              variant={"icon"}
+              className={"text-muted-foreground bg-gray-100"}
+            >
+              <Plus size={18} />
+            </Button>
+
+            {/* Dropdown on hover with slide-in animation */}
+            <div
+              className="absolute bg-transparent top-1 left-16 
+                        opacity-0 invisible 
+                        group-hover:opacity-100 group-hover:visible 
+                        transform -translate-x-2 group-hover:translate-x-0 
+                        transition-all duration-300 ease-out 
+                        z-10 flex flex-col gap-3"
+            >
+              <AddSource />
+              <UploadDocument />
+            </div>
+          </div>
+
           <div
             key={selectedDocumentId}
             className={`${
               selectedDocumentId && selectedDoc
-                ? "flex justify-center items-center bg-white border border-gray-200 shadow-xs rounded-md animate-pop-in"
+                ? "flex justify-center items-center bg-white  shadow-xs rounded-md animate-pop-in"
                 : "hidden"
             }`}
           >
-            <TooltipProvider>
+            <div className="relative group">
               <Tooltip>
-                <TooltipTrigger>
-                  <div className="cursor-pointer flex flex-col items-center justify-center text-sm text-gray-700 hover:bg-gray-50 rounded-md p-2 transition-colors">
+                <TooltipProvider>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => handleSelectDocument(selectedDoc)}
+                    className="cursor-pointer flex flex-col items-center justify-center text-sm text-gray-700 hover:bg-gray-50 bg-gray-100 rounded-md p-2 transition-colors"
+                  >
                     {getFileIcon(selectedDoc?.extension, selectedDoc?.name)}
-                  </div>
+                  </Button>
                 </TooltipTrigger>
-                <TooltipContent side="right">
-                  {selectedDoc?.name} (ID: {selectedDoc?.id})
-                </TooltipContent>
+                <TooltipContent side='right' >Click to remove</TooltipContent>
+              </TooltipProvider>
               </Tooltip>
-            </TooltipProvider>
+            </div>
           </div>
           <div className="w-[15px] bg-gray-300 h-[1px] my-2"> </div>
           <div>
@@ -189,8 +216,12 @@ const DocumentSearchTab = ({ title, content }) => {
                 )}
 
                 {documents.length > 12 && (
-                  <div className="text-slate-400 text-sm mt-1 cursor-pointer hover:bg-gray-100 rounded-md" onMouseEnter={toggleCollapse}
-                 >...</div>
+                  <div
+                    className="text-slate-400 text-sm mt-1 cursor-pointer hover:bg-gray-100 rounded-md"
+                    onMouseEnter={toggleCollapse}
+                  >
+                    ...
+                  </div>
                 )}
               </div>
             ) : null}

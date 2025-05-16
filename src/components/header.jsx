@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import useStore from "../store/useStore";
-import { EllipsisVertical, User } from "lucide-react";
+import { Columns3, EllipsisVertical, User } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import { mockData } from "@/lib/constants";
+import Image from "next/image";
 
 const Header = () => {
   const {
@@ -19,17 +20,14 @@ const Header = () => {
     user,
     selectedDocumentId,
     tabsList,
-    documentsList
+    documentsList,
   } = useStore();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const handleClickOutside = (event) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target)
-    ) {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
     }
   };
@@ -56,19 +54,30 @@ const Header = () => {
     }
   };
 
-  console.log(mockData?.Documents, 'helokokoo')
-  const selectedDoc = mockData?.Documents.filter((doc) => doc.ID === selectedDocumentId )
+  console.log(mockData?.Documents, "helokokoo");
+  const selectedDoc = mockData?.Documents.filter(
+    (doc) => doc.ID === selectedDocumentId
+  );
 
   return (
-    <div className="w-full flex justify-between items-center px-3 pr-4 pt-1 pb-2">
-      <div className="flex gap-8 justify-center items-center">
-        <h1 className="text-md font-extrabold tracking-wider text-white py-1 px-3 bg-gray-900 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] border border-gray-700 relative overflow-hidden">
+    <div className="w-full flex justify-between items-center px-3 pr-4 pb-2">
+      <div className="flex gap-4 justify-center items-center">
+        {/* <h1 className="text-md font-extrabold tracking-wider text-white py-1 px-3 bg-gray-900 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] border border-gray-700 relative overflow-hidden">
           <span className="absolute inset-0 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 opacity-40"></span>
           <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500 to-purple-500 opacity-20 blur-md"></span>
           <span className="relative z-10">DFX</span>
-        </h1>
-        {selectedDoc && <p>{selectedDoc[0]?.FileName} <span>{selectedDoc[0]?.ID}</span> </p>}
-        
+        </h1> */}
+        <Image src={'/favicon.png'} alt="logo" width={50} height={50}/>
+        {selectedDoc[0] && (
+          <div className="flex gap-3 p-1 justify-start items-center h-full">
+            <p className="text-gray-900/80 font-bold text-xl">
+              {selectedDoc[0]?.FileName}{" "}
+            </p>
+            <p className="text-muted-foreground text-sm h-fit mt-1">
+              ({selectedDoc[0]?.ID})
+            </p>
+          </div>
+        )}
       </div>
       <div className="flex items-center gap-4">
         {/* Custom Dropdown */}
@@ -83,11 +92,17 @@ const Header = () => {
             <TooltipProvider delayDuration={300}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <span className="inline-flex hover:bg-gray-200 p-1 rounded-full">
-                    <EllipsisVertical size={18} className="shrink-0 cursor-pointer" />
-                  </span>
+                  <div className="flex justify-center items-center hover:bg-gray-200 p-1 rounded-full w-10 h-10">
+                    <Columns3 
+                      size={18}
+                      className="shrink-0 cursor-pointer"
+                    />
+                  </div>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" className="text-xs font-medium mt-4">
+                <TooltipContent
+                  side="bottom"
+                  className="text-xs font-medium mt-4"
+                >
                   Select tabs
                 </TooltipContent>
               </Tooltip>

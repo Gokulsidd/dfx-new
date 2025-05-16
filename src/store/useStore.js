@@ -18,10 +18,12 @@ const useStore = create((set, get) => ({
   apiError: null,
   loading: true,
   isAddSourceDialogOpen: false,
+  isUploadDocumentDialogOpen: false,
   isCollapsed: true,
   dashboardId: null,
   tabsList: null,
   tags: [],
+  uploadedFiles: [],
   configs: {},
 
   // Setters
@@ -29,7 +31,10 @@ const useStore = create((set, get) => ({
   setUser: (user) => set({ user }),
   clearUser: () => set({ user: null }),
   setAddSourceDialog: (value) => set({ isAddSourceDialogOpen: value }),
+  setUploadDocumentDialog: (value) =>
+    set({ isUploadDocumentDialogOpen: value }),
   setTags: (values) => set({ tags: values }),
+  setUploadedFiles: (values) => set({ uploadedFiles: values }),
   setConfigs: (data) => set({ configs: data }),
 
   setIsCollapsed: (value) =>
@@ -82,7 +87,18 @@ const useStore = create((set, get) => ({
   },
 
   setSelectedDocumentId: async (id) => {
-    const { tabsList, selectedTabs } = get();
+    const { tabsList, selectedTabs,  } = get();
+    
+    if (!id) {
+      set({
+        selectedDocumentId: null,
+        documentData: null,
+        apiError: null,
+        selectedTabs: { options: [] },
+        isCollapsed: true,
+      });
+      return;
+    }
 
     // Reset the state
     set({
@@ -157,13 +173,13 @@ const useStore = create((set, get) => ({
   uploadFilesFromDnD: async (files) => {
     set({ apiError: null });
 
-    if(files){
+    if (files) {
       try {
-      const res = uploadFiles(files);
-      console.log(res);
-    } catch (err) {
-      set({ apiError: err.message });
-    }
+        const res = uploadFiles(files);
+        console.log(res);
+      } catch (err) {
+        set({ apiError: err.message });
+      }
     }
   },
 }));
