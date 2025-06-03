@@ -1,5 +1,4 @@
 const Loader = ({width, height}) => {
-    console.log(width, height)
   return (
     <div role="status">
       <svg

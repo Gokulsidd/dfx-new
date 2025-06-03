@@ -35,26 +35,61 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+
 ```
 dfx
 ├─ components.json
 ├─ eslint.config.mjs
 ├─ jsconfig.json
 ├─ next.config.mjs
+├─ next.config2.mjs
 ├─ package-lock.json
 ├─ package.json
 ├─ postcss.config.mjs
 ├─ public
+│  ├─ coding.png
+│  ├─ config.json
+│  ├─ csv-file.png
+│  ├─ csv.svg
+│  ├─ doc (1).png
+│  ├─ docx-file.png
+│  ├─ favicon.png
+│  ├─ file.png
 │  ├─ file.svg
+│  ├─ folder.svg
+│  ├─ gif.svg
 │  ├─ globe.svg
+│  ├─ image.svg
+│  ├─ jpeg.svg
+│  ├─ jpg.png
+│  ├─ jpg.svg
+│  ├─ lfimage.svg
+│  ├─ msg.svg
 │  ├─ next.svg
-│  ├─ pdf.png
+│  ├─ others.svg
+│  ├─ pdf (1).png
+│  ├─ pdf.svg
+│  ├─ png.png
+│  ├─ png.svg
+│  ├─ ppt.png
+│  ├─ ppt.svg
+│  ├─ pptx-file.png
+│  ├─ rtf.png
+│  ├─ text.svg
+│  ├─ txt.png
+│  ├─ upload_background.png
 │  ├─ vercel.svg
-│  └─ window.svg
+│  ├─ video.svg
+│  ├─ window.svg
+│  ├─ word.svg
+│  ├─ xls (3).png
+│  ├─ xlsm.png
+│  ├─ xlsx.png
+│  ├─ zip.png
+│  └─ zip.svg
 ├─ README.md
 └─ src
    ├─ app
-   │  ├─ favicon.ico
    │  ├─ globals.css
    │  ├─ layout.js
    │  └─ page.js
@@ -63,12 +98,20 @@ dfx
    │  │  ├─ add-source-dialog.jsx
    │  │  ├─ add-source-dropDown.jsx
    │  │  └─ add-source.jsx
+   │  ├─ AppInitializer.jsx
+   │  ├─ file-dropper.jsx
+   │  ├─ folder
+   │  │  └─ folder.jsx
    │  ├─ header.jsx
+   │  ├─ loader.jsx
+   │  ├─ MatterManagement
+   │  │  └─ MatterManagement.jsx
    │  ├─ mode-toggle.jsx
    │  ├─ no-document-selected.jsx
    │  ├─ tabs
    │  │  ├─ chat-document-tab.jsx
    │  │  ├─ document-search-tab.jsx
+   │  │  ├─ generic-tab.jsx
    │  │  ├─ metadata-tab.jsx
    │  │  ├─ preview-tab.jsx
    │  │  └─ tabs-container.jsx
@@ -84,7 +127,6 @@ dfx
    │  │  ├─ dropdown-menu.jsx
    │  │  ├─ input.jsx
    │  │  ├─ label.jsx
-   │  │  ├─ resizable.jsx
    │  │  ├─ skeleton.jsx
    │  │  ├─ sonner.jsx
    │  │  ├─ table.jsx
@@ -99,6 +141,8 @@ dfx
    ├─ lib
    │  ├─ constants.js
    │  └─ utils.js
+   ├─ services
+   │  └─ api.js
    └─ store
       └─ useStore.js
 

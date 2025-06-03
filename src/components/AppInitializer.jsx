@@ -7,7 +7,15 @@ import { getMockTabsResponse, mockUserData } from "@/lib/constants";
 
 const AppInitializer = () => {
   const searchParam = useSearchParams();
-  const { setDashboardId, configs, setConfigs, fetchUser, setUser, fetchTabsListForDashboard,  user, dashboardId } = useStore();
+  const {
+    setDashboardId,
+    setConfigs,
+    fetchUser,
+    setUser,
+    fetchTabsListForDashboard,
+    getWorkspaceCollections
+  
+  } = useStore();
 
   const getUser = async () => {
     setUser(mockUserData); // Simulated user data
@@ -15,7 +23,6 @@ const AppInitializer = () => {
   };
 
   useEffect(() => {
-    
     fetch("/config.json")
       .then((res) => res.json())
       .then((data) => {
@@ -23,23 +30,21 @@ const AppInitializer = () => {
       })
       .then(() => {
         getUser();
-        fetchTabsListForDashboard()
+        fetchTabsListForDashboard();
+        getWorkspaceCollections()
       })
       .catch((err) => {
         console.error("Failed to load config.json:", err);
-      })
-
-  }, [dashboardId, user]);
+      });
+  }, []);
 
   useEffect(() => {
     const id = searchParam.get("id");
-    console.log(id, "inside AppInitializer");
     if (id) {
       setDashboardId(id);
     }
   }, [searchParam, setDashboardId]);
 
-  console.log(configs, "this is from app initializer");
   return null;
 };
 

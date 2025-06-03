@@ -6,8 +6,6 @@ import useStore from "@/store/useStore";
 const getApiInstance = () => {
   const { configs } = useStore.getState();
 
-  console.log(configs, 'api instance 1')
-  
   return axios.create({
     baseURL: configs?.NEXT_PUBLIC_DFX_API_URL || "",
     withCredentials: true,
@@ -19,8 +17,7 @@ const getApiInstance = () => {
 
 const getApi2Instance = () => {
   const { configs } = useStore.getState();
-  
-  console.log(configs?.NEXT_PUBLIC_DFX_API_URL_2)
+
   return axios.create({
     baseURL: configs?.NEXT_PUBLIC_DFX_API_URL_2 || "",
     withCredentials: true,
@@ -30,9 +27,20 @@ const getApi2Instance = () => {
   });
 };
 
+const getApi3Instance = () => {
+  const { configs } = useStore.getState();
+
+  return axios.create({
+    baseURL: configs?.NEXT_PUBLIC_DFX_API_URL_3 || "",
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
 const getRepoName = () => {
   const { configs } = useStore.getState();
-  console.log( configs?.NEXT_PUBLIC_REPOSITORY_NAME)
   return configs?.NEXT_PUBLIC_REPOSITORY_NAME || "";
 };
 
@@ -40,7 +48,7 @@ const getRepoName = () => {
 
 export const fetchUser = () => {
   const api = getApiInstance();
-  console.log('this is get user from api instance', api)
+
   return api.get("App/User");
 };
 
@@ -109,7 +117,7 @@ export const uploadFiles = async (files) => {
       SecCode: "",
       Data: base64Data,
       VolumeID: -1,
-      IsNew: false
+      IsNew: false,
     }));
 
     const payload = {
@@ -117,13 +125,32 @@ export const uploadFiles = async (files) => {
       Files: fileData,
     };
 
-    console.log(payload, 'this is payload')
-
     const response = await api.post(`/DMS/UploadFromDnDFile`, payload);
-    return response.data;
+    console.log(response, "this is in API");
+    return response;
   } catch (error) {
-    console.error("Error uploading files:", error);
-    throw error;  // Re-throw error to propagate it to the caller
+    const err = new Error(error.message || "Something went wrong");
+    err.status = error.status || 500;
+    return err;
   }
 };
 
+export const fetchWorkspaceCollections = () => {
+  const api = getApi3Instance();
+
+  return api.get("/Workspace/GetWorkspace");
+};
+
+export const saveWorkSpaceCollection = async (payload) => {
+  const api = getApi3Instance();
+
+  try {
+    const res = await api.post("/Workspace/Save", payload);
+    console.log(res, "workspace save method res");
+    return res;
+  } catch (error) {
+    const err = new Error(error.message || "something went wrong");
+    err.status = err.status || 500;
+    return err;
+  }
+};

@@ -193,6 +193,17 @@ input[type=number] {
   }
 }
 
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(15px); /* Start 15px below final position */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .custom-shadow {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
@@ -200,6 +211,12 @@ input[type=number] {
 .animate-pop-in {
   animation: pop 0.3s ease-out;
 }
+
+.animate-fadeSlideUp {
+  animation: fadeSlideUp 0.3s ease-out;
+}
+
+
 .marquee-container:hover .marquee-text {
   animation: marquee 5s linear infinite;
   display: inline-block;

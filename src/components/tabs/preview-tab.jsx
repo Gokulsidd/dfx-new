@@ -7,21 +7,22 @@ import useStore from "@/store/useStore";
 
 const PreviewTab = ({ tab }) => {
   const { selectedDocumentId, toggleItem, tabsList, selectedTabs } = useStore();
-  // const iframeContainerRef = useRef(null);
-  // const [iframeKey, setIframeKey] = useState(Date.now()); // force iframe reload on resize
+  const { configs } = useStore.getState();
+  const iframeContainerRef = useRef(null);
+  const [iframeKey, setIframeKey] = useState(Date.now()); // force iframe reload on resize
 
-  // const iframeUrl = useMemo(() => {
-  //   if (!selectedDocumentId) return "";
-  //   let url = tab.url
-  //     .replace("${selectedDocumentId}", selectedDocumentId)
-  //     .replace("${REPO_NAME}", process.env.NEXT_PUBLIC_REPOSITORY_NAME || "LFRepo");
+  const iframeUrl = useMemo(() => {
+    if (!selectedDocumentId) return "";
+    let url = tab.url
+      .replace("${selectedDocumentId}", selectedDocumentId)
+      .replace("${REPO_NAME}", configs?.NEXT_PUBLIC_REPOSITORY_NAME || "");
 
-  //   if (url.includes("newfile=")) {
-  //     url = url.replace("A6vxMjA7.dat", `${selectedDocumentId}.dat`);
-  //   }
+    if (url.includes("newfile=")) {
+      url = url.replace("A6vxMjA7.dat", `${selectedDocumentId}.dat`);
+    }
 
-  //   return url;
-  // }, [tab?.url, selectedDocumentId]);
+    return url;
+  }, [tab?.url, selectedDocumentId]);
 
   const handleClose = () => {
     const previewTab = tabsList?.find((item) => item.name === "Preview");
@@ -72,15 +73,14 @@ const PreviewTab = ({ tab }) => {
       
       {/* ref={iframeContainerRef} */}
       <CardContent className="w-full h-full flex-1 p-0" >
-        {/* {iframeUrl && ( */}
+        {iframeUrl && (
           <iframe
-            // key={iframeKey} // 👈 this causes re-render
-            // src={iframeUrl}
-            src={tab?.url}
+            // key={iframeKey} // this causes re-render
+            src={iframeUrl}
             className="w-full h-full border-none min-h-[500px] rounded-b-2xl"
             title="Preview"
           ></iframe>
-        {/* )} */}
+         )} 
       </CardContent>
     </Card>
     </div>

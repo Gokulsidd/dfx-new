@@ -41,7 +41,6 @@ const ChatDocumentTab = ({tab}) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="w-full h-full flex-1 p-0">
-      {console.log(iframeUrl)}
         <iframe src={iframeUrl} className="rounded-b-2xl w-full h-full border-none min-h-[500px]" title="chat-with-document" ref={iframeRef} ></iframe>
       </CardContent>
     </Card>

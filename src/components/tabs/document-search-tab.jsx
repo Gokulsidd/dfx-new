@@ -12,16 +12,26 @@ import {
 } from "../ui/tooltip";
 
 import useStore from "@/store/useStore";
-import { getFileIcon, mockData, successToastObj } from "@/lib/constants";
+import {
+  getFileIcon,
+  getMockData,
+  mockData,
+  successToastObj,
+} from "@/lib/constants";
 
 import UploadDocument from "../uploadDocuments/upload-document";
 import AddSource from "../addSource/add-source";
 import { Checkbox } from "../ui/checkbox";
 import {
+  BookType,
+  Copy,
+  Delete,
   EllipsisVertical,
   FileText,
+  Globe,
   PanelLeft,
   Plus,
+  Trash,
   Upload,
 } from "lucide-react";
 import {
@@ -32,6 +42,8 @@ import {
 } from "../ui/dropdown-menu";
 import { toast } from "sonner";
 import { Toaster } from "../ui/sonner";
+import Link from "next/link";
+import SourcesDialog from "../sources/sources-dialog";
 
 const DocumentSearchTab = ({ title, content }) => {
   const [documents, setDocuments] = useState([]);
@@ -41,13 +53,15 @@ const DocumentSearchTab = ({ title, content }) => {
     toggleItem,
     documentsList,
     isCollapsed,
+    isUploadDocumentDialogOpen,
+    setUploadDocumentDialog,
     setIsCollapsed,
     configs,
   } = useStore();
 
   useEffect(() => {
-    if (mockData?.Documents) {
-      const mappedDocuments = mockData.Documents.map((doc) => ({
+    if (mockData) {
+      const mappedDocuments = mockData?.map((doc) => ({
         id: doc.ID,
         name: doc.FileName,
         createdBy: doc.CreatedBy,
@@ -80,6 +94,7 @@ const DocumentSearchTab = ({ title, content }) => {
   };
 
   const handleSelectDocument = (item) => {
+    console.log(selectedDocumentId === item.id, "testing selected doc");
     if (selectedDocumentId === item.id) {
       setSelectedDocumentId(null);
       return;
@@ -146,26 +161,23 @@ const DocumentSearchTab = ({ title, content }) => {
       {isCollapsed ? (
         <CardContent className="md:flex flex-col justify-center items-center gap-3">
           {/* Dropdown for AddSource and UploadDocument */}
-          <div className="relative group">
-            <Button
-              variant={"icon"}
-              className={"text-muted-foreground bg-gray-100"}
-            >
-              <Plus size={18} />
-            </Button>
+          <div>
+            <Tooltip>
+              <TooltipProvider>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={"icon"}
+                    className={"text-muted-foreground bg-gray-100"}
+                    onClick={() => setUploadDocumentDialog(true)}
+                  >
+                    <Plus size={18} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side='right'>Add Source</TooltipContent>
+              </TooltipProvider>
+            </Tooltip>
 
-            {/* Dropdown on hover with slide-in animation */}
-            <div
-              className="absolute bg-transparent top-1 left-16 
-                        opacity-0 invisible 
-                        group-hover:opacity-100 group-hover:visible 
-                        transform -translate-x-2 group-hover:translate-x-0 
-                        transition-all duration-300 ease-out 
-                        z-10 flex flex-col gap-3"
-            >
-              <AddSource />
-              <UploadDocument />
-            </div>
+            {isUploadDocumentDialogOpen && <UploadDocument />}
           </div>
 
           <div
@@ -179,16 +191,16 @@ const DocumentSearchTab = ({ title, content }) => {
             <div className="relative group">
               <Tooltip>
                 <TooltipProvider>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={() => handleSelectDocument(selectedDoc)}
-                    className="cursor-pointer flex flex-col items-center justify-center text-sm text-gray-700 hover:bg-gray-50 bg-gray-100 rounded-md p-2 transition-colors"
-                  >
-                    {getFileIcon(selectedDoc?.extension, selectedDoc?.name)}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side='right' >Click to remove</TooltipContent>
-              </TooltipProvider>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={() => handleSelectDocument(selectedDoc)}
+                      className="cursor-pointer flex flex-col items-center justify-center text-sm text-gray-700 hover:bg-gray-50 bg-gray-100 rounded-md p-2 transition-colors"
+                    >
+                      {getFileIcon(selectedDoc?.extension, selectedDoc?.name)}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Click to remove</TooltipContent>
+                </TooltipProvider>
               </Tooltip>
             </div>
           </div>
@@ -196,7 +208,7 @@ const DocumentSearchTab = ({ title, content }) => {
           <div>
             {documents.length > 0 ? (
               <div className="md:flex flex-col justify-center items-center gap-2">
-                {documents.slice(0, 12).map((doc) =>
+                {documents.slice(0, 10).map((doc) =>
                   selectedDocumentId != doc.id ? (
                     <div key={doc.id} onClick={() => handleSelectDocument(doc)}>
                       <TooltipProvider>
@@ -215,7 +227,7 @@ const DocumentSearchTab = ({ title, content }) => {
                   ) : null
                 )}
 
-                {documents.length > 12 && (
+                {documents.length > 10 && (
                   <div
                     className="text-slate-400 text-sm mt-1 cursor-pointer hover:bg-gray-100 rounded-md"
                     onMouseEnter={toggleCollapse}
@@ -230,8 +242,7 @@ const DocumentSearchTab = ({ title, content }) => {
       ) : (
         <CardContent className="flex flex-col h-full justify-start p-2 md:px-4 items-center gap-3 md:gap-5">
           <div className="w-full flex gap-2 md:gap-3 px-2 md:px-1">
-            <AddSource />
-            <UploadDocument />
+            <SourcesDialog />
           </div>
           <div className="w-full flex flex-col rounded-2xl px-2 md:px-4">
             {documents.length > 0 && (
@@ -291,7 +302,7 @@ const DocumentSearchTab = ({ title, content }) => {
                             </TooltipContent>
                             <DropdownMenuContent
                               align="right"
-                              className="w-40 md:ml-24 translate-x-4 text-muted-foreground font-medium text-sm"
+                              className="w-fit md:ml-24 p-2 translate-x-4 text-muted-foreground font-medium text-sm rounded-2xl"
                             >
                               <DropdownMenuItem
                                 onClick={(event) => {
@@ -300,7 +311,23 @@ const DocumentSearchTab = ({ title, content }) => {
                                 }}
                                 className="hover:bg-gray-100/80"
                               >
+                                <span>
+                                  <Copy />
+                                </span>{" "}
                                 Copy Name
+                              </DropdownMenuItem>
+                              <DropdownMenuItem className="hover:bg-gray-100/80 w-full">
+                                <Link
+                                  href={configs?.TRANSLATE_URL + item.id}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="w-full flex gap-2"
+                                >
+                                  <span>
+                                    <BookType />
+                                  </span>{" "}
+                                  Translate
+                                </Link>
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 className="text-red-600/70 hover:bg-red-100"
@@ -309,6 +336,9 @@ const DocumentSearchTab = ({ title, content }) => {
                                   handleRemoveDocument(item.id);
                                 }} // Prevent propagation here too
                               >
+                                <span>
+                                  <Trash className="text-red-600/70" />
+                                </span>{" "}
                                 Remove Document
                               </DropdownMenuItem>
                             </DropdownMenuContent>

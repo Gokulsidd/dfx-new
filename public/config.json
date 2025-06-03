@@ -1,6 +1,26 @@
 {
   "NEXT_PUBLIC_DFX_API_URL": "http://localhost/DFXDMSLite/dfxapi_demo/",
   "NEXT_PUBLIC_DFX_API_URL_2": "http://localhost/DFX_NEXT_API/api",
-  "NEXT_PUBLIC_REPOSITORY_NAME": "LFRep",
-  "NEXT_PUBLIC_DFX_BASE_PATH_URL": "/DFX_NEXT_APP"
+  "NEXT_PUBLIC_DFX_API_URL_3": "http://localhost/DFXDMSLite/Client360",
+  "NEXT_PUBLIC_REPOSITORY_NAME": "LFRepo",
+  "NEXT_PUBLIC_DFX_BASE_PATH_URL": "/DFX_NEXT_APP",
+  "TRANSLATE_URL": "http://localhost:3000/?id=",
+  "labels": {
+    "upload_documents": {
+      "label": "Upload Documents",
+      "sub_heading": "Drag and drop or choose file to upload"
+    },
+    "add_source": {
+      "label": "Add Source",
+      "sub_heading": "Add Source by DMS IDs"
+    },
+    "client_folder": {
+      "label": "Client Documents",
+      "sub_heading": "Save to client folder"
+    },
+    "matter_folder": {
+      "label": "Matter Documents",
+      "sub_heading": "Save to matter folder"
+    }
+  }
 }

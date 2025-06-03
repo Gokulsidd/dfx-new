@@ -21,7 +21,6 @@ const TabsContainer = () => {
     return tabsList?.sort((a, b) => a.seq - b.seq)
   }, [tabsList]);
 
-  console.log(selectedTabs.options, tabsList, 'this is the end ')
 
   const renderTabComponent = (tab) => {
     switch (tab.name) {
@@ -45,20 +44,19 @@ const TabsContainer = () => {
   };
 
   // Debug logging
-  if (process.env.NODE_ENV === "development") {
-    console.groupCollapsed("Tabs Container Debug");
-    console.log("%cSelected Tabs:", "color: #2196F3; font-weight: bold;", selectedTabs.options);
-    console.log("%cAvailable Tabs:", "color: #FF9800; font-weight: bold;", tabsList?.map((t) => t.name));
-    console.log("%cSelected Doc IDs:", "color: #9C27B0; font-weight: bold;", selectedDocumentId);
-    console.groupEnd();
-  }
+  // if (process.env.NODE_ENV === "development") {
+  //   console.groupCollapsed("Tabs Container Debug");
+  //   console.log("%cSelected Tabs:", "color: #2196F3; font-weight: bold;", selectedTabs.options);
+  //   console.log("%cAvailable Tabs:", "color: #FF9800; font-weight: bold;", tabsList?.map((t) => t.name));
+  //   console.log("%cSelected Doc IDs:", "color: #9C27B0; font-weight: bold;", selectedDocumentId);
+  //   console.groupEnd();
+  // }
 
   return (
     <div className="h-full">
       <main className="w-full h-full flex flex-col md:flex-row justify-start items-center gap-3 px-2">
         <DocumentSearchTab />
         {selectedTabs.options?.length === 0 && <NoDocumentSelected />}
-        {console.log(orderedTabs, 'this is ordered tabs')}
         {orderedTabs?.map((tab) => renderTabComponent(tab))}
       </main>
     </div>
