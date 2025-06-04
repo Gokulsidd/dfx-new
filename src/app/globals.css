@@ -204,6 +204,10 @@ input[type=number] {
   }
 }
 
+.custom-inner-shadow {
+  box-shadow: rgba(109, 109, 109, 0.2) 0px -40px 30px -25px inset;
+}
+
 .custom-shadow {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }

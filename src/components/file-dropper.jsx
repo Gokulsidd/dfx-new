@@ -106,14 +106,15 @@ const FileDropper = () => {
   };
 
   return (
-    <div className={`flex justify-around w-full h-full gap-6`}>
+    <div className={`flex justify-between gap-2 w-full h-full py-6 px-10`}>
+      
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onClick={triggerFileSelect}
-        className={`w-full ${uploadedFiles.length === 0 ? 'min-h-[380px] h-[400px]' : 'h-full'} bg-[url(/upload_background.png)] bg-cover bg-center flex flex-col items-center justify-center gap-8 border-2 border-dashed rounded-[50px] transition-all duration-200 cursor-pointer relative group
+        className={`w-full h-full bg-[url(/upload_background.png)] bg-cover bg-center flex flex-col items-center justify-center gap-8 border-2 border-dashed rounded-[50px] transition-all duration-200 cursor-pointer relative group
           ${
             isDragging
               ? "bg-blue-50 border-blue-400 text-blue-400 "
@@ -136,18 +137,20 @@ const FileDropper = () => {
             <Upload size={35} className="p-1" />
           </Button>
           <p className="text-lg font-medium text-gray-600  transition-colors duration-200">{configs?.labels.upload_documents.label}</p>
-          <p className="text-muted-foreground">
+          {/* <p className="text-muted-foreground">
             <span>{configs?.labels.upload_documents.sub_heading}</span>
-          </p>
+          </p> */}
         </div>
         {/* <div className="text-muted-foreground absolute bottom-4">Supported file types: {}</div> */}
       </div>
 
       {uploadedFiles.length != 0 && (
-        <div className="flex flex-col gap-2 w-full h-full">
-          <Collections />
-          <div className="rounded-[50px] w-full p-6 px-8 h-full flex flex-col justify-between items-center gap-4 relative z-0 bg-gray-100/70">
-          <div className={`w-full ${uploadedFiles.length != 0 ? 'h-[150px]' : 'h-300px]'}  bg flex flex-col gap-2  overflow-y-auto pr-2`}>
+        <div className="flex flex-col gap-2  w-full h-full ">
+          <div className="rounded-[50px] w-full p-4 px-8 h-full  flex flex-col justify-between items-center gap-2 relative z-0 bg-white">
+            <p className="font-bold text-[#0D141C] text-md px-4 w-full pb-1">
+              Uploaded Files <span className="text-muted-foreground text-sm font-medium">({uploadedFiles.length})</span>
+            </p>
+          <div className={`w-full h-full min-h-[150px]  bg flex flex-col gap-2  overflow-y-auto pr-2 mb-3 px-4`}>
             {uploadedFiles?.length === 0 ? (
               <div className="flex justify-center items-center text-gray-400 text-sm h-[180px]">
                 No files uploaded
@@ -158,7 +161,7 @@ const FileDropper = () => {
                 return (
                   <div
                     key={file.name}
-                    className="flex justify-between h-fit items-center w-full bg-white rounded-md shadow-sm px-4 py-2 border border-gray-200"
+                    className="flex justify-between h-fit items-center w-full bg-white rounded-md shadow-sm px-4 py-1 border border-gray-200"
                   >
                     <div className="flex  items-center gap-3 text-muted-foreground font-medium text-sm truncate">
                       {getFileIcon(extension, file.name)}
@@ -169,13 +172,14 @@ const FileDropper = () => {
                       className="text-gray-500 hover:bg-red-100 hover:text-red-600"
                       onClick={() => handleRemoveFile(file.name)}
                     >
-                      <Trash2 size={18} className="text-red-500" />
+                      <Trash2 size={16} className="text-red-500" />
                     </Button>
                   </div>
                 );
               })
             )}
           </div>
+          <Collections />
           {/* File Actions */}
           <div className="w-full flex justify-end gap-3">
             <Button

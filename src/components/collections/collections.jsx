@@ -50,15 +50,16 @@ const Collections = () => {
     setShowNewCollectionInput,
     isDeleteCollectionDialogOpen,
     setDeleteCollectionDialog,
+    isAddSourceDialogOpen,
     isEditCollectionDialogOpen,
     setEditCollectionDialog,
     deleteWorkSpaceCollection,
-    updateWorkSpaceCollection
+    updateWorkSpaceCollection,
   } = useStore();
 
   const [searchCollectionQuery, setSearchCollectionQuery] = useState("");
   const [isSorted, setIsSorted] = useState(false);
-  const [newWorkspaceName, setNewWorkspaceName] = useState('')
+  const [newWorkspaceName, setNewWorkspaceName] = useState();
 
   const filteredCollections = useMemo(() => {
     return collections.filter((item) =>
@@ -103,10 +104,12 @@ const Collections = () => {
   };
 
   return (
-    <div className={`w-full h-full flex flex-col gap-4 ${uploadedFiles?.length != 0 ? 'p-5 bg-gray-100/70 rounded-4xl' : '' }`}>
+    <div
+      className={`w-full h-full flex flex-col gap-4 p-5 bg-white rounded-4xl `}
+    >
       {/* Toggle buttons */}
       <div className="flex gap-3 w-full justify-between items-center">
-        <p className="font-bold text-[#0D141C] text-xl px-2">
+        <p className={`font-bold text-[#0D141C] text-md px-2`}>
           Add to Collections
         </p>
         <Button
@@ -137,7 +140,9 @@ const Collections = () => {
             />
           </div>
 
-          <div className={`flex flex-col gap-3 ${uploadedFiles.length != 0 ? 'h-[200px]' : 'h-[220px]'} w-full bg-gray-100/70 border border-gray-200 overflow-y-auto p-3 px-6 rounded-xl`}>
+          <div
+            className={`flex flex-col gap-3 h-[180px] max-h-[180px]  w-full min-w-[470px] bg-gray-100/70 border border-gray-200 overflow-y-auto p-3 px-6 rounded-xl`}
+          >
             <div className="h-full w-full flex flex-col justify-center items-center text-center gap-1">
               <p className="text-muted-foreground font-medium">
                 Enter a new collection name above.
@@ -174,7 +179,9 @@ const Collections = () => {
           </div>
 
           {/* Existing Collections List */}
-          <div className={`flex flex-wrap gap-3 ${uploadedFiles.length != 0 ? 'h-[200px]' : 'h-[220px]'} max-h-full w-full bg-gray-100/70 border border-gray-200 overflow-y-auto p-3 px-6 rounded-xl`}>
+          <div
+            className={`flex flex-wrap gap-3 justify-start items-start h-[180px] max-h-[180px] w-full min-w-[470px] bg-gray-100/70 border border-gray-200 hover:overflow-y-auto overflow-y-hidden p-3 px-6 rounded-xl`}
+          >
             {filteredCollections.length === 0 ? (
               <div className="h-full w-full flex flex-col justify-center items-center text-center gap-1">
                 <p className="text-muted-foreground text-sm">
@@ -188,7 +195,9 @@ const Collections = () => {
               filteredCollections.map((item) => (
                 <div
                   key={item.id || item.workspaceName}
-                  className={`flex justify-between items-center  ${uploadedFiles.length != 0 ? 'w-full ' : 'w-[240px]'} h-fit rounded-md shadow-sm px-4 py-2 border-l-8 cursor-pointer group transition-colors duration-200
+                  className={`flex justify-between items-center ${
+                    isAddSourceDialogOpen ? "w-[290px]" : "w-full"
+                  } h-fit rounded-md shadow-sm px-4 py-2 border-l-8 cursor-pointer group transition-colors duration-200
                     border-blue-500  
                     ${
                       selectedCollection && selectedCollection.id === item.id
@@ -212,7 +221,13 @@ const Collections = () => {
                     }`}
                   >
                     <SquareLibrary size={18} />
-                    <span className={`${uploadedFiles.length != 0 ? 'max-w-[300px]' : 'max-w-[130px]'} truncate `}>
+                    <span
+                      className={`${
+                        !isAddSourceDialogOpen
+                          ? "max-w-[300px]"
+                          : "max-w-[180px]"
+                      } truncate `}
+                    >
                       {item.workspaceName}
                     </span>
                   </div>
@@ -252,7 +267,7 @@ const Collections = () => {
                           open={isEditCollectionDialogOpen}
                           onOpenChange={setEditCollectionDialog}
                         >
-                          <DialogTrigger asChild>
+                          <DialogTrigger asChild onClick={() => setNewWorkspaceName(item.workspaceName)}>
                             <div className="flex w-full items-center gap-2">
                               <Edit className="h-4 w-4 text-muted-foreground" />
                               <span>Edit</span>
@@ -272,8 +287,11 @@ const Collections = () => {
                                   type="text"
                                   value={newWorkspaceName}
                                   className="w-full px-3 py-3 border rounded-xl bg-background text-sm focus:ring focus:ring-gray-300"
-                                  onChange={(e) => setNewWorkspaceName(e.target.value)}
-                                  onKeyDown={(e) => e.stopPropagation()} 
+                                  onChange={(e) =>
+                                    setNewWorkspaceName(e.target.value)
+                                  }
+                                  onKeyDown={(e) => e.stopPropagation()}
+                                  autoFocus
                                 />
                               </div>
                             </DialogHeader>
@@ -290,7 +308,11 @@ const Collections = () => {
                                 variant={"outline"}
                                 className="bg-gray-900/90 text-sm text-slate-50 w-fit min-w-[80px] px-4 py-2 float-right hover:bg-gray-900 rounded-2xl"
                                 onClick={() => {
-                                  updateWorkSpaceCollection(newWorkspaceName, item)
+                                  alert(newWorkspaceName)
+                                  updateWorkSpaceCollection(
+                                    newWorkspaceName,
+                                    item
+                                  );
                                 }}
                               >
                                 Save Changes
@@ -314,31 +336,19 @@ const Collections = () => {
                             </div>
                           </DialogTrigger>
                           <DialogContent
-                            className="w-full max-w-lg h-[260px] p-6 flex flex-col gap-8 rounded-4xl"
+                            className="w-full max-w-xl h-[260px] p-6 flex flex-col gap-8 rounded-4xl"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <DialogHeader className={"flex flex-col gap-8"}>
-                              <DialogTitle>Delete Collection</DialogTitle>
-                              <div
-                                className={
-                                  "flex flex-col w-full items-center justify-center gap-3"
-                                }
-                              >
-                                <p className="text-md text-muted-foreground font-semibold">
-                                  Are you sure you want to delete this
-                                  collection ?
+                            <DialogHeader className="flex flex-col gap-8">
+                              <DialogTitle className="text-gray-900 dark:text-white">
+                                Delete Collection
+                              </DialogTitle>
+                              <div className="flex flex-col w-full items-center justify-center gap-3">
+                                <p className="text-md font-semibold text-center text-gray-700 dark:text-gray-300">
+                                  Are you sure you want to delete this collection?
                                 </p>
-                                <div
-                                  className={`flex justify-between items-center w-fit h-fit rounded-md shadow-sm px-4 py-2 border-l-8 cursor-pointer group transition-colors duration-200 border-blue-500 bg-gray-800 text-white`}
-                                >
-                                  <div
-                                    className={`flex items-center gap-3 font-medium text-sm text-white`}
-                                  >
-                                    <SquareLibrary size={18} />
-                                    <span className="max-w-[200px] truncate">
-                                      {item.workspaceName}
-                                    </span>
-                                  </div>
+                                <div className="font-bold text-md text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                                  {item.workspaceName}
                                 </div>
                               </div>
                             </DialogHeader>
@@ -356,7 +366,7 @@ const Collections = () => {
                                   "bg-red-600 text-white hover:bg-red-700"
                                 }
                                 onClick={() => {
-                                  deleteWorkSpaceCollection(item)
+                                  deleteWorkSpaceCollection(item);
                                 }}
                               >
                                 Confirm

@@ -21,18 +21,26 @@ import {
 import { FolderPlus, Plus } from "lucide-react";
 import Loader from "../loader";
 import FileDropper from "../file-dropper";
+import Collections from "../collections/collections";
 
 const UploadInFolder = () => {
   const [loading, setLoading] = useState(false);
   const {
     setDocumentsList,
-    isAddSourceDialogOpen,
     setAddSourceDialog,
-    isCollapsed,
+    setUploadDocumentDialog,
     user,
     tags,
     setTags,
-    configs
+    configs,
+    setSelectedDocumentId,
+    setSelectedCollection,
+    selectedCollection,
+    setCollectionTags,
+    collectionTags,
+    newCollectionName,
+    showNewCollectionInput,
+    saveWorkSpaceCollection,
   } = useStore();
 
   const handleSearchClick = async () => {
@@ -59,67 +67,39 @@ const UploadInFolder = () => {
   };
 
   return (
-    <Dialog>
-      <div className="w-full h-full text-center">
-        <DialogTrigger asChild>
-          <Tooltip>
-            <Button
-              onClick={() => setAddSourceDialog(true)}
-              variant="ghost"
-              className="group w-full h-[170px] rounded-[50px] p-8 border-2 border-dashed border-gray-300 hover:border-blue-400 bg-white hover:bg-blue-50  flex flex-col items-center justify-center gap-4"
-            >
-              <div className="relative">
-                <FolderPlus className="w-12 h-12 text-gray-300 group-hover:text-blue-300 transition-colors" />
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-lg font-medium text-gray-600  transition-colors duration-200">
-                 {configs?.labels.client_folder.label}
-                </span>
-                <span className="text-sm text-gray-400  transition-colors duration-200">
-                  {configs?.labels.client_folder.sub_heading}
-                </span>
-              </div>
-            </Button>
-          </Tooltip>
-        </DialogTrigger>
+    <div className="flex flex-col justify-start  gap-12 w-full h-full py-6 px-10">
+      <div className="flex flex-col gap-2 px-4">
+        <p className="font-bold text-[#0D141C] text-md px-2">
+          Search Documents
+        </p>
+        <TagInput />
       </div>
-      <DialogContent className="w-full md:max-w-3xl lg:max-w-4xl h-[700px] flex flex-col py-4 bg-white rounded-4xl">
-        <DialogHeader className="flex items-start h-fit p-2">
-          <DialogTitle className="text-muted-foreground font-medium text-lg hidden">
-            Add Source
-          </DialogTitle>
-        </DialogHeader>
-        <div className="w-full flex justify-center items-start flex-1">
-          <Tabs defaultValue="MyDocuments" className="w-full h-full">
-            <TabsList className="w-full h-13 flex justify-center overflow-x-auto overflow-y-hidden bg-white">
-              <TabsTrigger value="input">Document IDs</TabsTrigger>
-            </TabsList>
-
-            <TabsContent
-              value="input"
-              className="flex flex-col justify-start gap-6 w-full h-full rounded-lg p-4 px-16"
-            >
-              <TagInput />
-              <div className="w-full flex gap-3 justify-end items-center">
-                <Button
-                  variant={"outline"}
-                  className="text-muted-foreground text-sm hover:bg-gray-200"
-                  onClick={handleClearClick}
-                >
-                  Clear
-                </Button>
-                <Button
-                  className="bg-gray-900/90 text-sm text-slate-50 w-fit min-w-[80px] px-4 py-2 float-right hover:bg-gray-900 rounded-2xl"
-                  onClick={handleSearchClick}
-                >
-                  {loading ? <Loader width={4} height={4} /> : "Search"}
-                </Button>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </DialogContent>
-    </Dialog>
+      <div>
+        <Collections />
+      </div>
+      <div className="w-full h-fit flex gap-3 justify-end items-center">
+        <Button
+          variant={"outline"}
+          className="text-muted-foreground text-sm hover:bg-gray-200"
+          onClick={handleClearClick}
+        >
+          Clear
+        </Button>
+        <Button
+          className="bg-gray-900/90 text-sm text-slate-50 w-fit min-w-[80px] px-4 py-2 float-right hover:bg-gray-900 rounded-2xl"
+          onClick={handleSearchClick}
+          disabled={[...tags, ...collectionTags]?.length === 0}
+        >
+          {loading ? (
+            <Loader width={4} height={4} />
+          ) : selectedCollection ? (
+            "Save and Search"
+          ) : (
+            "Search"
+          )}
+        </Button>
+      </div>
+    </div>
   );
 };
 

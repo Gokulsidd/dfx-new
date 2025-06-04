@@ -53,8 +53,8 @@ const DocumentSearchTab = ({ title, content }) => {
     toggleItem,
     documentsList,
     isCollapsed,
-    isUploadDocumentDialogOpen,
-    setUploadDocumentDialog,
+    isSourcesDialogOpen,
+    setIsSourcesDialogOpen,
     setIsCollapsed,
     configs,
   } = useStore();
@@ -160,7 +160,6 @@ const DocumentSearchTab = ({ title, content }) => {
       </CardHeader>
       {isCollapsed ? (
         <CardContent className="md:flex flex-col justify-center items-center gap-3">
-          {/* Dropdown for AddSource and UploadDocument */}
           <div>
             <Tooltip>
               <TooltipProvider>
@@ -168,16 +167,16 @@ const DocumentSearchTab = ({ title, content }) => {
                   <Button
                     variant={"icon"}
                     className={"text-muted-foreground bg-gray-100"}
-                    onClick={() => setUploadDocumentDialog(true)}
+                    onClick={() => setIsSourcesDialogOpen(true)}
                   >
                     <Plus size={18} />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent side='right'>Add Source</TooltipContent>
+                <TooltipContent side="right">Add Source</TooltipContent>
               </TooltipProvider>
             </Tooltip>
 
-            {isUploadDocumentDialogOpen && <UploadDocument />}
+            {isSourcesDialogOpen && <SourcesDialog />}
           </div>
 
           <div
@@ -241,13 +240,42 @@ const DocumentSearchTab = ({ title, content }) => {
         </CardContent>
       ) : (
         <CardContent className="flex flex-col h-full justify-start p-2 md:px-4 items-center gap-3 md:gap-5">
-          <div className="w-full flex gap-2 md:gap-3 px-2 md:px-1">
-            <SourcesDialog />
-          </div>
-          <div className="w-full flex flex-col rounded-2xl px-2 md:px-4">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild className="w-full">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsSourcesDialogOpen(true)}
+                  className="w-full h-10 font-semibold text-sm text-muted-foreground hover:bg-gray-100 rounded-full hover:border-gray-300"
+                >
+                  <span className="text-xl">+</span> Add Source
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Manage Sources</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          {isSourcesDialogOpen && <SourcesDialog />}
+          <div className="w-full flex flex-col rounded-2xl px-2 md:px-2">
             {documents.length > 0 && (
-              <div className="w-full  text-muted-foreground font-semibold text-sm mb-2">
-                Select a document
+              <div className="flex w-full items-center">
+                <div className="w-full pt-1  text-muted-foreground font-semibold text-sm mb-2">
+                  Select a document
+                </div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        onClick={() => setDocuments([])}
+                        className={
+                          "text-xs h-7 hover:shadow-sm hover:text-muted-foreground text-muted-foreground font-medium hover:bg-gray-100 bg-gray-100/70 px-4 py-1 rounded-xl"
+                        }
+                      >
+                        Clear All
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side='bottom'>Clear all files</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             )}
             <div

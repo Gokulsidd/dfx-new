@@ -1,19 +1,7 @@
-// components/sources/sources-dialog.jsx
-import { useState } from "react";
-import { PlusCircle } from "lucide-react";
-import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import AddSource from "../addSource/add-source";
 import UploadInFolder from "../folder/folder";
 import MatterManagement from "../MatterManagement/MatterManagement";
-import Collections from "../collections/collections";
 import {
   Tooltip,
   TooltipContent,
@@ -21,74 +9,59 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import FileDropper from "../file-dropper";
+import useStore from "@/store/useStore";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
 const SourcesDialog = () => {
-  const [isSourcesDialogOpen, setIsSourcesDialogOpen] = useState(false);
-
+  const { isSourcesDialogOpen, setIsSourcesDialogOpen, configs } = useStore();
   return (
     <Dialog open={isSourcesDialogOpen} onOpenChange={setIsSourcesDialogOpen}>
-      <DialogTrigger asChild>
-        <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild className="w-full">
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsSourcesDialogOpen(true)}
-                    className="w-full h-10 font-semibold text-sm text-muted-foreground hover:bg-gray-100 rounded-full hover:border-gray-300"
-                  >
-                    <span className="text-xl">+</span> Add Source
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">Manage Sources</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-      </DialogTrigger>
-
-      <DialogContent className="w-full md:max-w-3xl lg:max-w-6xl h-[700px] p-4 bg-white rounded-3xl">
+      <DialogContent className="w-full md:max-w-3xl lg:max-w-6xl h-[700px] p-3 bg-white rounded-3xl">
         <DialogHeader>
           <DialogTitle className="text-lg text-muted-foreground hidden">
             Source Manager
           </DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="add" className="w-full h-full flex flex-col items-start">
-          <TabsList className="flex justify-between w-[60%] h-10 gap-2 p-1 bg-gray-100 rounded-xl shadow-inner">
-            <TabsTrigger
-              value="upload"
-              className="w-full rounded-lg px-4 py-2 text-xs font-semibold text-gray-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-black transition-all duration-200"
-            >
-              Upload Document
-            </TabsTrigger>
-            <TabsTrigger
-              value="add"
-              className="w-full rounded-lg px-4 py-2 text-xs font-semibold text-gray-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-black transition-all duration-200"
-            >
-              Add Source
-            </TabsTrigger>
-            <TabsTrigger
-              value="folder"
-              className="w-full rounded-lg px-4 py-2 text-xs font-semibold text-gray-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-black transition-all duration-200"
-            >
-              Folder
-            </TabsTrigger>
-            <TabsTrigger
-              value="matter"
-              className="w-full rounded-lg px-4 py-2 text-xs font-semibold text-gray-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-black transition-all duration-200"
-            >
-              Matter
-            </TabsTrigger>
+        <Tabs
+          defaultValue={configs?.labels.upload_documents.label}
+          className="w-full h-full flex flex-col gap-4 items-center relative"
+        >
+          <TabsList className="absolute -top-3 flex justify-between w-[70%] h-9 p-2 py-4 bg-gray-100 rounded-b-xl shadow-[inset_0_-2px_5px_rgba(0,0,0,0.08)]">
+            {Object.entries(configs?.labels).map(([key, item]) => (
+              <TabsTrigger
+                disabled={item.sub_heading == "Save to Client Folder" || item.sub_heading == "Save to Matter Folder" ? true : false }
+                key={key}
+                value={item.label}
+                className={`w-full h-7 rounded-lg px-4 py-2 text-xs font-semibold text-gray-600 data-[state=active]:bg-white  data-[state=active]:shadow-sm data-[state=active]:text-black  transition-all duration-200 `}
+              >
+                {item.sub_heading}
+              </TabsTrigger>
+            ))}
           </TabsList>
 
-          <TabsContent value="upload" className="h-full w-full overflow-auto">
-            <FileDropper  />
+          <TabsContent
+            value={configs?.labels.upload_documents.label}
+            className="h-full w-full overflow-auto mt-10"
+          >
+            <FileDropper />
           </TabsContent>
-          <TabsContent value="add" className="h-full w-full overflow-auto">
+          <TabsContent
+            value={configs?.labels.add_source.label}
+            className="h-full w-full overflow-auto mt-10"
+          >
             <AddSource />
           </TabsContent>
-          <TabsContent value="folder" className="h-full overflow-auto">
-            <Collections />
+          <TabsContent
+            value={configs?.labels.client_folder.label}
+            className="h-full w-full overflow-auto mt-10"
+          >
+            <UploadInFolder />
           </TabsContent>
-          <TabsContent value="matter" className="h-full overflow-auto">
+          <TabsContent
+            value={configs?.labels.matter_folder.label}
+            className="h-full w-full overflow-auto mt-10"
+          >
             <MatterManagement />
           </TabsContent>
         </Tabs>

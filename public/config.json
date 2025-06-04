@@ -8,19 +8,20 @@
   "labels": {
     "upload_documents": {
       "label": "Upload Documents",
-      "sub_heading": "Drag and drop or choose file to upload"
+      "sub_heading": "Upload to My Documents"
     },
     "add_source": {
       "label": "Add Source",
-      "sub_heading": "Add Source by DMS IDs"
+      "sub_heading": "Search DMS ID"
     },
     "client_folder": {
       "label": "Client Documents",
-      "sub_heading": "Save to client folder"
+      "sub_heading": "Save to Client Folder"
     },
     "matter_folder": {
       "label": "Matter Documents",
-      "sub_heading": "Save to matter folder"
+      "sub_heading": "Save to Matter Folder"
     }
   }
+
 }

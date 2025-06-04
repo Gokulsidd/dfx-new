@@ -36,6 +36,7 @@ const useStore = create((set, get) => ({
   isUploadDocumentDialogOpen: false,
   isDeleteCollectionDialogOpen: false,
   isEditCollectionDialogOpen: false,
+  isSourcesDialogOpen: false,
   isCollapsed: true,
 
   //collections ( existing collection / new collection )
@@ -62,6 +63,7 @@ const useStore = create((set, get) => ({
     set({ isUploadDocumentDialogOpen: value }),
   setDeleteCollectionDialog: (value) => set({ isDeleteCollectionDialogOpen: value }),
   setEditCollectionDialog: (value) => set({ isEditCollectionDialogOpen: value }),
+  setIsSourcesDialogOpen: (value) => set({ isSourcesDialogOpen: value }),
 
   setTags: (values) => set({ tags: values }),
   setCollectionTags: (values) => set({ collectionTags: values }),
@@ -196,6 +198,7 @@ const useStore = create((set, get) => ({
       set({ apiError: err.message });
     }
   },
+
 
   fetchTabsListForDashboard: async () => {
     set({ tabsList: null, apiError: null });
